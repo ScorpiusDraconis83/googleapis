@@ -9,14 +9,15 @@
 #    * extra_protoc_file_parameters
 # The complete list of preserved parameters can be found in the source code.
 
-# This is an API workspace, having public visibility by default makes perfect sense.
-package(default_visibility = ["//visibility:public"])
+load("@com_google_googleapis_imports//:imports.bzl", "cc_grpc_library", "cc_proto_library", "csharp_gapic_assembly_pkg", "csharp_gapic_library", "csharp_grpc_library", "csharp_proto_library", "go_gapic_assembly_pkg", "go_gapic_library", "go_proto_library", "java_gapic_assembly_gradle_pkg", "java_gapic_library", "java_gapic_test", "java_grpc_library", "java_proto_library", "nodejs_gapic_assembly_pkg", "nodejs_gapic_library", "php_gapic_assembly_pkg", "php_gapic_library", "php_proto_library", "proto_library_with_info", "py_gapic_assembly_pkg", "py_gapic_library", "py_test", "ruby_cloud_gapic_library", "ruby_gapic_assembly_pkg", "ruby_grpc_library", "ruby_proto_library")
 
 ##############################################################################
 # Common
 ##############################################################################
 load("@rules_proto//proto:defs.bzl", "proto_library")
-load("@com_google_googleapis_imports//:imports.bzl", "proto_library_with_info")
+
+# This is an API workspace, having public visibility by default makes perfect sense.
+package(default_visibility = ["//visibility:public"])
 
 _PROTO_SUBPACKAGE_DEPS = [
     "//google/cloud/aiplatform/v1/schema/predict/instance:instance_proto",
@@ -31,8 +32,10 @@ proto_library(
         "accelerator_type.proto",
         "annotation.proto",
         "annotation_spec.proto",
+        "api_auth.proto",
         "artifact.proto",
         "batch_prediction_job.proto",
+        "cached_content.proto",
         "completion_stats.proto",
         "content.proto",
         "context.proto",
@@ -52,6 +55,7 @@ proto_library(
         "entity_type.proto",
         "env_var.proto",
         "evaluated_annotation.proto",
+        "evaluation_service.proto",
         "event.proto",
         "execution.proto",
         "explanation.proto",
@@ -70,6 +74,8 @@ proto_library(
         "featurestore_monitoring.proto",
         "featurestore_online_service.proto",
         "featurestore_service.proto",
+        "gen_ai_cache_service.proto",
+        "genai_tuning_service.proto",
         "hyperparameter_tuning_job.proto",
         "index.proto",
         "index_endpoint.proto",
@@ -92,22 +98,35 @@ proto_library(
         "model_deployment_monitoring_job.proto",
         "model_evaluation.proto",
         "model_evaluation_slice.proto",
+        "model_garden_service.proto",
         "model_monitoring.proto",
         "model_service.proto",
-        "model_garden_service.proto",
         "nas_job.proto",
+        "network_spec.proto",
+        "notebook_euc_config.proto",
+        "notebook_execution_job.proto",
+        "notebook_idle_shutdown_config.proto",
+        "notebook_runtime.proto",
+        "notebook_runtime_template_ref.proto",
+        "notebook_service.proto",
         "openapi.proto",
         "operation.proto",
+        "persistent_resource.proto",
+        "persistent_resource_service.proto",
         "pipeline_failure_policy.proto",
         "pipeline_job.proto",
         "pipeline_service.proto",
         "pipeline_state.proto",
         "prediction_service.proto",
         "publisher_model.proto",
+        "reasoning_engine.proto",
+        "reasoning_engine_execution_service.proto",
+        "reasoning_engine_service.proto",
+        "reservation_affinity.proto",
         "saved_query.proto",
-        "service_networking.proto",
         "schedule.proto",
         "schedule_service.proto",
+        "service_networking.proto",
         "specialist_pool.proto",
         "specialist_pool_service.proto",
         "study.proto",
@@ -119,10 +138,14 @@ proto_library(
         "tensorboard_time_series.proto",
         "tool.proto",
         "training_pipeline.proto",
+        "tuning_job.proto",
         "types.proto",
         "unmanaged_container_model.proto",
         "user_action_reference.proto",
         "value.proto",
+        "vertex_rag_data.proto",
+        "vertex_rag_data_service.proto",
+        "vertex_rag_service.proto",
         "vizier_service.proto",
     ],
     deps = [
@@ -133,9 +156,10 @@ proto_library(
         "//google/api:resource_proto",
         "//google/longrunning:operations_proto",
         "//google/rpc:status_proto",
-        "//google/type:interval_proto",
-        "//google/type:money_proto",
         "//google/type:date_proto",
+        "//google/type:interval_proto",
+        "//google/type:latlng_proto",
+        "//google/type:money_proto",
         "@com_google_protobuf//:duration_proto",
         "@com_google_protobuf//:empty_proto",
         "@com_google_protobuf//:field_mask_proto",
@@ -153,18 +177,6 @@ proto_library_with_info(
         "//google/cloud/location:location_proto",
         "//google/iam/v1:iam_policy_proto",
     ] + _PROTO_SUBPACKAGE_DEPS,
-)
-
-##############################################################################
-# Java
-##############################################################################
-load(
-    "@com_google_googleapis_imports//:imports.bzl",
-    "java_gapic_assembly_gradle_pkg",
-    "java_gapic_library",
-    "java_gapic_test",
-    "java_grpc_library",
-    "java_proto_library",
 )
 
 _JAVA_PROTO_SUBPACKAGE_DEPS = [
@@ -197,7 +209,7 @@ java_gapic_library(
     srcs = [":aiplatform_proto_with_info"],
     gapic_yaml = "aiplatform_gapic.yaml",
     grpc_service_config = "aiplatform_grpc_service_config.json",
-    rest_numeric_enums = False,
+    rest_numeric_enums = True,
     service_yaml = "aiplatform_v1.yaml",
     test_deps = [
         ":aiplatform_java_grpc",
@@ -217,18 +229,29 @@ java_gapic_test(
     name = "aiplatform_java_gapic_test_suite",
     test_classes = [
         "com.google.cloud.aiplatform.v1.DatasetServiceClientTest",
+        "com.google.cloud.aiplatform.v1.DeploymentResourcePoolServiceClientTest",
         "com.google.cloud.aiplatform.v1.EndpointServiceClientTest",
+        "com.google.cloud.aiplatform.v1.EvaluationServiceClientTest",
+        "com.google.cloud.aiplatform.v1.FeatureOnlineStoreAdminServiceClientTest",
+        "com.google.cloud.aiplatform.v1.FeatureOnlineStoreServiceClientTest",
+        "com.google.cloud.aiplatform.v1.FeatureRegistryServiceClientTest",
         "com.google.cloud.aiplatform.v1.FeaturestoreOnlineServingServiceClientTest",
         "com.google.cloud.aiplatform.v1.FeaturestoreServiceClientTest",
+        "com.google.cloud.aiplatform.v1.GenAiTuningServiceClientTest",
         "com.google.cloud.aiplatform.v1.IndexEndpointServiceClientTest",
         "com.google.cloud.aiplatform.v1.IndexServiceClientTest",
         "com.google.cloud.aiplatform.v1.JobServiceClientTest",
         "com.google.cloud.aiplatform.v1.LlmUtilityServiceClientTest",
+        "com.google.cloud.aiplatform.v1.MatchServiceClientTest",
         "com.google.cloud.aiplatform.v1.MetadataServiceClientTest",
         "com.google.cloud.aiplatform.v1.MigrationServiceClientTest",
+        "com.google.cloud.aiplatform.v1.ModelGardenServiceClientTest",
         "com.google.cloud.aiplatform.v1.ModelServiceClientTest",
+        "com.google.cloud.aiplatform.v1.NotebookServiceClientTest",
+        "com.google.cloud.aiplatform.v1.PersistentResourceServiceClientTest",
         "com.google.cloud.aiplatform.v1.PipelineServiceClientTest",
         "com.google.cloud.aiplatform.v1.PredictionServiceClientTest",
+        "com.google.cloud.aiplatform.v1.ScheduleServiceClientTest",
         "com.google.cloud.aiplatform.v1.SpecialistPoolServiceClientTest",
         "com.google.cloud.aiplatform.v1.TensorboardServiceClientTest",
         "com.google.cloud.aiplatform.v1.VizierServiceClientTest",
@@ -249,16 +272,6 @@ java_gapic_assembly_gradle_pkg(
     ] + _JAVA_PROTO_SUBPACKAGE_DEPS + _PROTO_SUBPACKAGE_DEPS + _JAVA_GRPC_SUBPACKAGE_DEPS,
 )
 
-##############################################################################
-# Go
-##############################################################################
-load(
-    "@com_google_googleapis_imports//:imports.bzl",
-    "go_gapic_assembly_pkg",
-    "go_gapic_library",
-    "go_proto_library",
-)
-
 go_proto_library(
     name = "aiplatform_go_proto",
     compilers = ["@io_bazel_rules_go//proto:go_grpc"],
@@ -269,9 +282,10 @@ go_proto_library(
         "//google/api:httpbody_go_proto",
         "//google/longrunning:longrunning_go_proto",
         "//google/rpc:status_go_proto",
-        "//google/type:interval_go_proto",
-        "//google/type:money_go_proto",
         "//google/type:date_go_proto",
+        "//google/type:interval_go_proto",
+        "//google/type:latlng_go_proto",
+        "//google/type:money_go_proto",
     ],
 )
 
@@ -282,7 +296,7 @@ go_gapic_library(
     importpath = "cloud.google.com/go/aiplatform/apiv1;aiplatform",
     metadata = True,
     release_level = "ga",
-    rest_numeric_enums = False,
+    rest_numeric_enums = True,
     service_yaml = "aiplatform_v1.yaml",
     transport = "grpc",
     deps = [
@@ -310,16 +324,6 @@ go_gapic_assembly_pkg(
     ],
 )
 
-##############################################################################
-# Python
-##############################################################################
-load(
-    "@com_google_googleapis_imports//:imports.bzl",
-    "py_gapic_assembly_pkg",
-    "py_gapic_library",
-    "py_test",
-)
-
 _PY_GAPIC_SUBPACKAGE_DEPS = [
     "//google/cloud/aiplatform/v1/schema/predict/instance:instance_py_gapic",
     "//google/cloud/aiplatform/v1/schema/predict/params:params_py_gapic",
@@ -331,7 +335,7 @@ py_gapic_library(
     name = "aiplatform_py_gapic",
     srcs = [":aiplatform_proto"],
     grpc_service_config = "aiplatform_grpc_service_config.json",
-    rest_numeric_enums = False,
+    rest_numeric_enums = True,
     service_yaml = "aiplatform_v1.yaml",
     transport = "grpc+rest",
     deps = [
@@ -357,16 +361,6 @@ py_gapic_assembly_pkg(
     ] + _PROTO_SUBPACKAGE_DEPS + _PY_GAPIC_SUBPACKAGE_DEPS,
 )
 
-##############################################################################
-# PHP
-##############################################################################
-load(
-    "@com_google_googleapis_imports//:imports.bzl",
-    "php_gapic_assembly_pkg",
-    "php_gapic_library",
-    "php_proto_library",
-)
-
 php_proto_library(
     name = "aiplatform_php_proto",
     deps = [":aiplatform_proto"],
@@ -376,11 +370,13 @@ php_gapic_library(
     name = "aiplatform_php_gapic",
     srcs = [":aiplatform_proto_with_info"],
     grpc_service_config = "aiplatform_grpc_service_config.json",
-    migration_mode = "MIGRATING",
-    rest_numeric_enums = False,
+    migration_mode = "NEW_SURFACE_ONLY",
+    rest_numeric_enums = True,
     service_yaml = "aiplatform_v1.yaml",
     transport = "grpc+rest",
-    deps = [":aiplatform_php_proto"],
+    deps = [
+        ":aiplatform_php_proto",
+    ],
 )
 
 # Open Source Packages
@@ -392,15 +388,6 @@ php_gapic_assembly_pkg(
     ],
 )
 
-##############################################################################
-# Node.js
-##############################################################################
-load(
-    "@com_google_googleapis_imports//:imports.bzl",
-    "nodejs_gapic_assembly_pkg",
-    "nodejs_gapic_library",
-)
-
 nodejs_gapic_library(
     name = "aiplatform_nodejs_gapic",
     package_name = "@google-cloud/aiplatform",
@@ -408,7 +395,7 @@ nodejs_gapic_library(
     extra_protoc_parameters = ["metadata"],
     grpc_service_config = "aiplatform_grpc_service_config.json",
     package = "google.cloud.aiplatform.v1",
-    rest_numeric_enums = False,
+    rest_numeric_enums = True,
     service_yaml = "aiplatform_v1.yaml",
     transport = "grpc",
     deps = [],
@@ -420,17 +407,6 @@ nodejs_gapic_assembly_pkg(
         ":aiplatform_nodejs_gapic",
         ":aiplatform_proto",
     ] + _PROTO_SUBPACKAGE_DEPS,
-)
-
-##############################################################################
-# Ruby
-##############################################################################
-load(
-    "@com_google_googleapis_imports//:imports.bzl",
-    "ruby_cloud_gapic_library",
-    "ruby_gapic_assembly_pkg",
-    "ruby_grpc_library",
-    "ruby_proto_library",
 )
 
 ruby_proto_library(
@@ -456,10 +432,11 @@ ruby_cloud_gapic_library(
         "ruby-cloud-service-override=AiPlatform=AIPlatform",
     ],
     grpc_service_config = "aiplatform_grpc_service_config.json",
-    rest_numeric_enums = False,
+    rest_numeric_enums = True,
     ruby_cloud_description = "Vertex AI enables data scientists, developers, and AI newcomers to create custom machine learning models specific to their business needs by leveraging Google's state-of-the-art transfer learning and innovative AI research.",
     ruby_cloud_title = "Vertex AI V1",
     service_yaml = "aiplatform_v1.yaml",
+    transport = "grpc+rest",
     deps = [
         ":aiplatform_ruby_grpc",
         ":aiplatform_ruby_proto",
@@ -476,17 +453,6 @@ ruby_gapic_assembly_pkg(
     ],
 )
 
-##############################################################################
-# C#
-##############################################################################
-load(
-    "@com_google_googleapis_imports//:imports.bzl",
-    "csharp_gapic_assembly_pkg",
-    "csharp_gapic_library",
-    "csharp_grpc_library",
-    "csharp_proto_library",
-)
-
 _CSHARP_PROTO_SUBPACKAGE_DEPS = [
     "//google/cloud/aiplatform/v1/schema/predict/instance:instance_csharp_proto",
     "//google/cloud/aiplatform/v1/schema/predict/params:params_csharp_proto",
@@ -496,6 +462,7 @@ _CSHARP_PROTO_SUBPACKAGE_DEPS = [
 
 csharp_proto_library(
     name = "aiplatform_csharp_proto",
+    extra_opts = [],
     deps = [":aiplatform_proto"],
 )
 
@@ -510,8 +477,9 @@ csharp_gapic_library(
     srcs = [":aiplatform_proto_with_info"],
     common_resources_config = "@gax_dotnet//:Google.Api.Gax/ResourceNames/CommonResourcesConfig.json",
     grpc_service_config = "aiplatform_grpc_service_config.json",
-    rest_numeric_enums = False,
+    rest_numeric_enums = True,
     service_yaml = "aiplatform_v1.yaml",
+    transport = "grpc+rest",
     deps = [
         ":aiplatform_csharp_grpc",
         ":aiplatform_csharp_proto",
@@ -526,15 +494,6 @@ csharp_gapic_assembly_pkg(
         ":aiplatform_csharp_grpc",
         ":aiplatform_csharp_proto",
     ] + _CSHARP_PROTO_SUBPACKAGE_DEPS,
-)
-
-##############################################################################
-# C++
-##############################################################################
-load(
-    "@com_google_googleapis_imports//:imports.bzl",
-    "cc_grpc_library",
-    "cc_proto_library",
 )
 
 cc_proto_library(

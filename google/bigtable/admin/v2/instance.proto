@@ -1,4 +1,4 @@
-// Copyright 2023 Google LLC
+// Copyright 2024 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import "google/bigtable/admin/v2/common.proto";
 import "google/protobuf/timestamp.proto";
 
 option csharp_namespace = "Google.Cloud.Bigtable.Admin.V2";
-option go_package = "google.golang.org/genproto/googleapis/bigtable/admin/v2;admin";
+option go_package = "cloud.google.com/go/bigtable/admin/apiv2/adminpb;adminpb";
 option java_multiple_files = true;
 option java_outer_classname = "InstanceProto";
 option java_package = "com.google.bigtable.admin.v2";
@@ -172,6 +172,21 @@ message Cluster {
     DISABLED = 4;
   }
 
+  // Possible node scaling factors of the clusters. Node scaling delivers better
+  // latency and more throughput by removing node boundaries.
+  enum NodeScalingFactor {
+    // No node scaling specified. Defaults to NODE_SCALING_FACTOR_1X.
+    NODE_SCALING_FACTOR_UNSPECIFIED = 0;
+
+    // The cluster is running with a scaling factor of 1.
+    NODE_SCALING_FACTOR_1X = 1;
+
+    // The cluster is running with a scaling factor of 2.
+    // All node count values must be in increments of 2 with this scaling factor
+    // enabled, otherwise an INVALID_ARGUMENT error will be returned.
+    NODE_SCALING_FACTOR_2X = 2;
+  }
+
   // Autoscaling config for a cluster.
   message ClusterAutoscalingConfig {
     // Required. Autoscaling limits for this cluster.
@@ -229,6 +244,10 @@ message Cluster {
   // throughput and more consistent performance.
   int32 serve_nodes = 4;
 
+  // Immutable. The node scaling factor of this cluster.
+  NodeScalingFactor node_scaling_factor = 9
+      [(google.api.field_behavior) = IMMUTABLE];
+
   oneof config {
     // Configuration for this cluster.
     ClusterConfig cluster_config = 7;
@@ -258,9 +277,34 @@ message AppProfile {
   // equidistant. Choosing this option sacrifices read-your-writes consistency
   // to improve availability.
   message MultiClusterRoutingUseAny {
+    // If enabled, Bigtable will route the request based on the row key of the
+    // request, rather than randomly. Instead, each row key will be assigned
+    // to a cluster, and will stick to that cluster. If clusters are added or
+    // removed, then this may affect which row keys stick to which clusters.
+    // To avoid this, users can use a cluster group to specify which clusters
+    // are to be used. In this case, new clusters that are not a part of the
+    // cluster group will not be routed to, and routing will be unaffected by
+    // the new cluster. Moreover, clusters specified in the cluster group cannot
+    // be deleted unless removed from the cluster group.
+    message RowAffinity {}
+
     // The set of clusters to route to. The order is ignored; clusters will be
     // tried in order of distance. If left empty, all clusters are eligible.
     repeated string cluster_ids = 1;
+
+    // Possible algorithms for routing affinity. If enabled, Bigtable will
+    // route between equidistant clusters in a deterministic order rather than
+    // choosing randomly.
+    //
+    // This mechanism gives read-your-writes consistency for *most* requests
+    // under *most* circumstances, without sacrificing availability. Consistency
+    // is *not* guaranteed, as requests might still fail over between clusters
+    // in the event of errors or latency.
+    oneof affinity {
+      // Row affinity sticky routing based on the row key of the request.
+      // Requests that span multiple rows are routed non-deterministically.
+      RowAffinity row_affinity = 3;
+    }
   }
 
   // Unconditionally routes all read/write requests to a specific cluster.
@@ -295,6 +339,35 @@ message AppProfile {
   message StandardIsolation {
     // The priority of requests sent using this app profile.
     Priority priority = 1;
+  }
+
+  // Data Boost is a serverless compute capability that lets you run
+  // high-throughput read jobs on your Bigtable data, without impacting the
+  // performance of the clusters that handle your application traffic.
+  // Currently, Data Boost exclusively supports read-only use-cases with
+  // single-cluster routing.
+  //
+  // Data Boost reads are only guaranteed to see the results of writes that
+  // were written at least 30 minutes ago. This means newly written values may
+  // not become visible for up to 30m, and also means that old values may
+  // remain visible for up to 30m after being deleted or overwritten. To
+  // mitigate the staleness of the data, users may either wait 30m, or use
+  // CheckConsistency.
+  message DataBoostIsolationReadOnly {
+    // Compute Billing Owner specifies how usage should be accounted when using
+    // Data Boost. Compute Billing Owner also configures which Cloud Project is
+    // charged for relevant quota.
+    enum ComputeBillingOwner {
+      // Unspecified value.
+      COMPUTE_BILLING_OWNER_UNSPECIFIED = 0;
+
+      // The host Cloud Project containing the targeted Bigtable Instance /
+      // Table pays for compute.
+      HOST_PAYS = 1;
+    }
+
+    // The Compute Billing Owner for this Data Boost App Profile.
+    optional ComputeBillingOwner compute_billing_owner = 1;
   }
 
   // The unique name of the app profile. Values are of the form
@@ -335,6 +408,10 @@ message AppProfile {
     // The standard options used for isolating this app profile's traffic from
     // other use cases.
     StandardIsolation standard_isolation = 11;
+
+    // Specifies that this app profile is intended for read-only usage via the
+    // Data Boost feature.
+    DataBoostIsolationReadOnly data_boost_isolation_read_only = 10;
   }
 }
 

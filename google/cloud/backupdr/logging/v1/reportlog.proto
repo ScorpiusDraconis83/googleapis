@@ -1,4 +1,4 @@
-// Copyright 2023 Google LLC
+// Copyright 2024 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -315,4 +315,95 @@ message ProtectedResource {
   string remote_appliance_id = 20;
   // Optional. Recovery Point.
   string recovery_point = 21;
+}
+
+// Holds information for the Mounted Images log
+message MountedImage {
+  // Required. Source Resource name.
+  string source_resource_name = 1;
+  // Required. Source Resource id.
+  string source_resource_id = 2;
+  // Required. Cluster Name.
+  string appliance_name = 3;
+  // Required. Cluster Id.
+  string appliance_id = 4;
+  // Required. Mounted Image Name.
+  string mounted_image_name = 5;
+  // Required. Source Image Name.
+  string source_image_name = 6;
+  // Required.Source Image Type.
+  string source_image_type = 7;
+  // Required. Recovery point Date.
+  string recovery_point_date = 8;
+  // Required. Last Mount Date
+  string last_mount_date = 9;
+  // Required. Resource type.
+  string resource_type = 10;
+  // Required. Source Host Name.
+  string source_host_name = 11;
+  // Required. Source Host Id.
+  string source_host_id = 12;
+  // Required. Mounted Host Name.
+  string mounted_host_name = 13;
+  // Required. Mounted Host Id.
+  string mounted_host_id = 14;
+  // Required. Mounted Resource Name.
+  string mounted_resource_name = 15;
+  // Required. Resource Virtual size(in GiB)
+  double resource_virtual_size_in_gib = 16;
+  // Required. Storage Consumed(in GiB).
+  double storage_consumed_in_gib = 17;
+  // Optional. label.
+  string mounted_resource_label = 18;
+  // Optional. Restorable Objects.
+  string restorable_object = 19;
+  // Required. Mounted Image Age(in days).
+  int32 mounted_image_age_in_days = 20;
+  // Required. User Name.
+  string user_name = 21;
+  // Optional. Read Mode.
+  string read_mode = 22;
+  // Required. Resource size(in GiB)
+  double resource_size_in_gib = 23;
+  // Optional. Image Expiration Date
+  string image_expiration_date = 24;
+}
+
+// Holds information for the Connector Versions log
+message ConnectorVersionReportLog {
+  // Required. Appliance Name.
+  string appliance_name = 1;
+
+  // Required. Appliance Id.
+  string appliance_id = 2;
+
+  // Required. Host Name.
+  string host_name = 3;
+
+  // Required. Host Id.
+  string host_id = 4;
+
+  // Optional. Os Type.
+  string host_os_type = 5;
+
+  // Required. Host Ip Address.
+  string host_ip_address = 6;
+
+  // Optional. Db Authentication.
+  string db_authentication = 7;
+
+  // Required. Installed version.
+  string installed_version = 8;
+
+  // Optional. Available version.
+  string available_version = 9;
+
+  // Required. Version Check.
+  string version_check = 10;
+
+  // Required. Disk Preference.
+  string disk_preference = 11;
+
+  // Required. Transport
+  string transport = 12;
 }

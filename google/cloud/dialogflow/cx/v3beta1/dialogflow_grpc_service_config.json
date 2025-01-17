@@ -9,6 +9,9 @@
           "service": "google.cloud.dialogflow.cx.v3beta1.Changelogs"
         },
         {
+          "service": "google.cloud.dialogflow.cx.v3beta1.ConversationHistory"
+        },
+        {
           "service": "google.cloud.dialogflow.cx.v3beta1.Deployments"
         },
         {
@@ -67,12 +70,6 @@
         },
         {
           "service": "google.cloud.dialogflow.cx.v3beta1.Webhooks"
-        },
-        {
-          "service": "google.cloud.dialogflow.cx.v3beta1.Documents"
-        },
-        {
-          "service": "google.cloud.dialogflow.cx.v3beta1.KnowledgeBases"
         }
       ],
       "timeout": "60s",

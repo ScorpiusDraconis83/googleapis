@@ -7,11 +7,16 @@ apis:
 - name: google.cloud.aiplatform.v1beta1.DatasetService
 - name: google.cloud.aiplatform.v1beta1.DeploymentResourcePoolService
 - name: google.cloud.aiplatform.v1beta1.EndpointService
+- name: google.cloud.aiplatform.v1beta1.EvaluationService
+- name: google.cloud.aiplatform.v1beta1.ExtensionExecutionService
+- name: google.cloud.aiplatform.v1beta1.ExtensionRegistryService
 - name: google.cloud.aiplatform.v1beta1.FeatureOnlineStoreAdminService
 - name: google.cloud.aiplatform.v1beta1.FeatureOnlineStoreService
 - name: google.cloud.aiplatform.v1beta1.FeatureRegistryService
 - name: google.cloud.aiplatform.v1beta1.FeaturestoreOnlineServingService
 - name: google.cloud.aiplatform.v1beta1.FeaturestoreService
+- name: google.cloud.aiplatform.v1beta1.GenAiCacheService
+- name: google.cloud.aiplatform.v1beta1.GenAiTuningService
 - name: google.cloud.aiplatform.v1beta1.IndexEndpointService
 - name: google.cloud.aiplatform.v1beta1.IndexService
 - name: google.cloud.aiplatform.v1beta1.JobService
@@ -20,19 +25,26 @@ apis:
 - name: google.cloud.aiplatform.v1beta1.MetadataService
 - name: google.cloud.aiplatform.v1beta1.MigrationService
 - name: google.cloud.aiplatform.v1beta1.ModelGardenService
+- name: google.cloud.aiplatform.v1beta1.ModelMonitoringService
 - name: google.cloud.aiplatform.v1beta1.ModelService
+- name: google.cloud.aiplatform.v1beta1.NotebookService
 - name: google.cloud.aiplatform.v1beta1.PersistentResourceService
 - name: google.cloud.aiplatform.v1beta1.PipelineService
 - name: google.cloud.aiplatform.v1beta1.PredictionService
+- name: google.cloud.aiplatform.v1beta1.ReasoningEngineExecutionService
+- name: google.cloud.aiplatform.v1beta1.ReasoningEngineService
 - name: google.cloud.aiplatform.v1beta1.ScheduleService
 - name: google.cloud.aiplatform.v1beta1.SpecialistPoolService
 - name: google.cloud.aiplatform.v1beta1.TensorboardService
+- name: google.cloud.aiplatform.v1beta1.VertexRagDataService
+- name: google.cloud.aiplatform.v1beta1.VertexRagService
 - name: google.cloud.aiplatform.v1beta1.VizierService
 - name: google.cloud.location.Locations
 - name: google.iam.v1.IAMPolicy
 - name: google.longrunning.Operations
 
 types:
+- name: google.cloud.aiplatform.v1beta1.AssignNotebookRuntimeOperationMetadata
 - name: google.cloud.aiplatform.v1beta1.BatchCancelPipelineJobsResponse
 - name: google.cloud.aiplatform.v1beta1.BatchCreateFeaturesOperationMetadata
 - name: google.cloud.aiplatform.v1beta1.BatchCreateFeaturesResponse
@@ -58,6 +70,9 @@ types:
 - name: google.cloud.aiplatform.v1beta1.CreateIndexEndpointOperationMetadata
 - name: google.cloud.aiplatform.v1beta1.CreateIndexOperationMetadata
 - name: google.cloud.aiplatform.v1beta1.CreateMetadataStoreOperationMetadata
+- name: google.cloud.aiplatform.v1beta1.CreateModelMonitorOperationMetadata
+- name: google.cloud.aiplatform.v1beta1.CreateNotebookExecutionJobOperationMetadata
+- name: google.cloud.aiplatform.v1beta1.CreateNotebookRuntimeTemplateOperationMetadata
 - name: google.cloud.aiplatform.v1beta1.CreatePersistentResourceOperationMetadata
 - name: google.cloud.aiplatform.v1beta1.CreateRegistryFeatureOperationMetadata
 - name: google.cloud.aiplatform.v1beta1.CreateSpecialistPoolOperationMetadata
@@ -82,20 +97,25 @@ types:
 - name: google.cloud.aiplatform.v1beta1.FeatureView
 - name: google.cloud.aiplatform.v1beta1.ImportDataOperationMetadata
 - name: google.cloud.aiplatform.v1beta1.ImportDataResponse
+- name: google.cloud.aiplatform.v1beta1.ImportExtensionOperationMetadata
 - name: google.cloud.aiplatform.v1beta1.ImportFeatureValuesOperationMetadata
 - name: google.cloud.aiplatform.v1beta1.ImportFeatureValuesResponse
 - name: google.cloud.aiplatform.v1beta1.MutateDeployedIndexOperationMetadata
 - name: google.cloud.aiplatform.v1beta1.MutateDeployedIndexResponse
 - name: google.cloud.aiplatform.v1beta1.MutateDeployedModelOperationMetadata
 - name: google.cloud.aiplatform.v1beta1.MutateDeployedModelResponse
+- name: google.cloud.aiplatform.v1beta1.PredictLongRunningMetadata
+- name: google.cloud.aiplatform.v1beta1.PredictLongRunningResponse
 - name: google.cloud.aiplatform.v1beta1.PurgeArtifactsMetadata
 - name: google.cloud.aiplatform.v1beta1.PurgeArtifactsResponse
 - name: google.cloud.aiplatform.v1beta1.PurgeContextsMetadata
 - name: google.cloud.aiplatform.v1beta1.PurgeContextsResponse
 - name: google.cloud.aiplatform.v1beta1.PurgeExecutionsMetadata
 - name: google.cloud.aiplatform.v1beta1.PurgeExecutionsResponse
+- name: google.cloud.aiplatform.v1beta1.RebootPersistentResourceOperationMetadata
 - name: google.cloud.aiplatform.v1beta1.RestoreDatasetVersionOperationMetadata
 - name: google.cloud.aiplatform.v1beta1.SpecialistPool
+- name: google.cloud.aiplatform.v1beta1.StartNotebookRuntimeOperationMetadata
 - name: google.cloud.aiplatform.v1beta1.SuggestTrialsMetadata
 - name: google.cloud.aiplatform.v1beta1.SuggestTrialsResponse
 - name: google.cloud.aiplatform.v1beta1.UndeployIndexOperationMetadata
@@ -112,9 +132,11 @@ types:
 - name: google.cloud.aiplatform.v1beta1.UpdateFeaturestoreOperationMetadata
 - name: google.cloud.aiplatform.v1beta1.UpdateIndexOperationMetadata
 - name: google.cloud.aiplatform.v1beta1.UpdateModelDeploymentMonitoringJobOperationMetadata
+- name: google.cloud.aiplatform.v1beta1.UpdateModelMonitorOperationMetadata
 - name: google.cloud.aiplatform.v1beta1.UpdatePersistentResourceOperationMetadata
 - name: google.cloud.aiplatform.v1beta1.UpdateSpecialistPoolOperationMetadata
 - name: google.cloud.aiplatform.v1beta1.UpdateTensorboardOperationMetadata
+- name: google.cloud.aiplatform.v1beta1.UpgradeNotebookRuntimeOperationMetadata
 - name: google.cloud.aiplatform.v1beta1.UploadModelOperationMetadata
 - name: google.cloud.aiplatform.v1beta1.UploadModelResponse
 - name: google.cloud.aiplatform.v1beta1.schema.ImageDataItem
@@ -174,12 +196,16 @@ http:
     - post: '/v1beta1/{resource=projects/*/locations/*/endpoints/*}:getIamPolicy'
     - post: '/v1beta1/{resource=projects/*/locations/*/notebookRuntimeTemplates/*}:getIamPolicy'
     - post: '/v1beta1/{resource=projects/*/locations/*/publishers/*/models/*}:getIamPolicy'
+    - post: '/v1beta1/{resource=projects/*/locations/*/featureOnlineStores/*}:getIamPolicy'
+    - post: '/v1beta1/{resource=projects/*/locations/*/featureOnlineStores/*/featureViews/*}:getIamPolicy'
     - post: '/ui/{resource=projects/*/locations/*/featurestores/*}:getIamPolicy'
     - post: '/ui/{resource=projects/*/locations/*/featurestores/*/entityTypes/*}:getIamPolicy'
     - post: '/ui/{resource=projects/*/locations/*/models/*}:getIamPolicy'
     - post: '/ui/{resource=projects/*/locations/*/endpoints/*}:getIamPolicy'
     - post: '/ui/{resource=projects/*/locations/*/notebookRuntimeTemplates/*}:getIamPolicy'
     - post: '/ui/{resource=projects/*/locations/*/publishers/*/models/*}:getIamPolicy'
+    - post: '/ui/{resource=projects/*/locations/*/featureOnlineStores/*}:getIamPolicy'
+    - post: '/ui/{resource=projects/*/locations/*/featureOnlineStores/*/featureViews/*}:getIamPolicy'
   - selector: google.iam.v1.IAMPolicy.SetIamPolicy
     post: '/v1beta1/{resource=projects/*/locations/*/featurestores/*}:setIamPolicy'
     body: '*'
@@ -192,6 +218,10 @@ http:
       body: '*'
     - post: '/v1beta1/{resource=projects/*/locations/*/notebookRuntimeTemplates/*}:setIamPolicy'
       body: '*'
+    - post: '/v1beta1/{resource=projects/*/locations/*/featureOnlineStores/*}:setIamPolicy'
+      body: '*'
+    - post: '/v1beta1/{resource=projects/*/locations/*/featureOnlineStores/*/featureViews/*}:setIamPolicy'
+      body: '*'
     - post: '/ui/{resource=projects/*/locations/*/featurestores/*}:setIamPolicy'
       body: '*'
     - post: '/ui/{resource=projects/*/locations/*/featurestores/*/entityTypes/*}:setIamPolicy'
@@ -202,6 +232,10 @@ http:
       body: '*'
     - post: '/ui/{resource=projects/*/locations/*/notebookRuntimeTemplates/*}:setIamPolicy'
       body: '*'
+    - post: '/ui/{resource=projects/*/locations/*/featureOnlineStores/*}:setIamPolicy'
+      body: '*'
+    - post: '/ui/{resource=projects/*/locations/*/featureOnlineStores/*/featureViews/*}:setIamPolicy'
+      body: '*'
   - selector: google.iam.v1.IAMPolicy.TestIamPermissions
     post: '/v1beta1/{resource=projects/*/locations/*/featurestores/*}:testIamPermissions'
     body: '*'
@@ -210,14 +244,20 @@ http:
     - post: '/v1beta1/{resource=projects/*/locations/*/models/*}:testIamPermissions'
     - post: '/v1beta1/{resource=projects/*/locations/*/endpoints/*}:testIamPermissions'
     - post: '/v1beta1/{resource=projects/*/locations/*/notebookRuntimeTemplates/*}:testIamPermissions'
+    - post: '/v1beta1/{resource=projects/*/locations/*/featureOnlineStores/*}:testIamPermissions'
+    - post: '/v1beta1/{resource=projects/*/locations/*/featureOnlineStores/*/featureViews/*}:testIamPermissions'
     - post: '/ui/{resource=projects/*/locations/*/featurestores/*}:testIamPermissions'
     - post: '/ui/{resource=projects/*/locations/*/featurestores/*/entityTypes/*}:testIamPermissions'
     - post: '/ui/{resource=projects/*/locations/*/models/*}:testIamPermissions'
     - post: '/ui/{resource=projects/*/locations/*/endpoints/*}:testIamPermissions'
     - post: '/ui/{resource=projects/*/locations/*/notebookRuntimeTemplates/*}:testIamPermissions'
+    - post: '/ui/{resource=projects/*/locations/*/featureOnlineStores/*}:testIamPermissions'
+    - post: '/ui/{resource=projects/*/locations/*/featureOnlineStores/*/featureViews/*}:testIamPermissions'
   - selector: google.longrunning.Operations.CancelOperation
     post: '/ui/{name=projects/*/locations/*/operations/*}:cancel'
     additional_bindings:
+    - post: '/ui/{name=projects/*/locations/*/agents/*/operations/*}:cancel'
+    - post: '/ui/{name=projects/*/locations/*/apps/*/operations/*}:cancel'
     - post: '/ui/{name=projects/*/locations/*/datasets/*/operations/*}:cancel'
     - post: '/ui/{name=projects/*/locations/*/datasets/*/dataItems/*/operations/*}:cancel'
     - post: '/ui/{name=projects/*/locations/*/datasets/*/savedQueries/*/operations/*}:cancel'
@@ -234,6 +274,7 @@ http:
     - post: '/ui/{name=projects/*/locations/*/customJobs/*/operations/*}:cancel'
     - post: '/ui/{name=projects/*/locations/*/dataLabelingJobs/*/operations/*}:cancel'
     - post: '/ui/{name=projects/*/locations/*/hyperparameterTuningJobs/*/operations/*}:cancel'
+    - post: '/ui/{name=projects/*/locations/*/tuningJobs/*/operations/*}:cancel'
     - post: '/ui/{name=projects/*/locations/*/indexes/*/operations/*}:cancel'
     - post: '/ui/{name=projects/*/locations/*/indexEndpoints/*/operations/*}:cancel'
     - post: '/ui/{name=projects/*/locations/*/metadataStores/*/operations/*}:cancel'
@@ -245,6 +286,10 @@ http:
     - post: '/ui/{name=projects/*/locations/*/migratableResources/*/operations/*}:cancel'
     - post: '/ui/{name=projects/*/locations/*/models/*/operations/*}:cancel'
     - post: '/ui/{name=projects/*/locations/*/models/*/evaluations/*/operations/*}:cancel'
+    - post: '/ui/{name=projects/*/locations/*/notebookExecutionJobs/*/operations/*}:cancel'
+    - post: '/ui/{name=projects/*/locations/*/notebookRuntimes/*/operations/*}:cancel'
+    - post: '/ui/{name=projects/*/locations/*/notebookRuntimeTemplates/*/operations/*}:cancel'
+    - post: '/ui/{name=projects/*/locations/*/persistentResources/*/operations/*}:cancel'
     - post: '/ui/{name=projects/*/locations/*/studies/*/operations/*}:cancel'
     - post: '/ui/{name=projects/*/locations/*/studies/*/trials/*/operations/*}:cancel'
     - post: '/ui/{name=projects/*/locations/*/trainingPipelines/*/operations/*}:cancel'
@@ -256,6 +301,8 @@ http:
     - post: '/ui/{name=projects/*/locations/*/tensorboards/*/experiments/*/runs/*/operations/*}:cancel'
     - post: '/ui/{name=projects/*/locations/*/tensorboards/*/experiments/*/runs/*/timeSeries/*/operations/*}:cancel'
     - post: '/v1beta1/{name=projects/*/locations/*/operations/*}:cancel'
+    - post: '/v1beta1/{name=projects/*/locations/*/agents/*/operations/*}:cancel'
+    - post: '/v1beta1/{name=projects/*/locations/*/apps/*/operations/*}:cancel'
     - post: '/v1beta1/{name=projects/*/locations/*/datasets/*/operations/*}:cancel'
     - post: '/v1beta1/{name=projects/*/locations/*/datasets/*/dataItems/*/operations/*}:cancel'
     - post: '/v1beta1/{name=projects/*/locations/*/datasets/*/savedQueries/*/operations/*}:cancel'
@@ -267,7 +314,6 @@ http:
     - post: '/v1beta1/{name=projects/*/locations/*/exampleStores/*/operations/*}:cancel'
     - post: '/v1beta1/{name=projects/*/locations/*/extensionControllers/*/operations/*}:cancel'
     - post: '/v1beta1/{name=projects/*/locations/*/extensions/*/operations/*}:cancel'
-    - post: '/v1beta1/{name=projects/*/locations/*/extensions/*/deployments/*/operations/*}:cancel'
     - post: '/v1beta1/{name=projects/*/locations/*/featurestores/*/operations/*}:cancel'
     - post: '/v1beta1/{name=projects/*/locations/*/featurestores/*/entityTypes/*/operations/*}:cancel'
     - post: '/v1beta1/{name=projects/*/locations/*/featurestores/*/entityTypes/*/features/*/operations/*}:cancel'
@@ -285,7 +331,12 @@ http:
     - post: '/v1beta1/{name=projects/*/locations/*/migratableResources/*/operations/*}:cancel'
     - post: '/v1beta1/{name=projects/*/locations/*/models/*/operations/*}:cancel'
     - post: '/v1beta1/{name=projects/*/locations/*/models/*/evaluations/*/operations/*}:cancel'
+    - post: '/v1beta1/{name=projects/*/locations/*/notebookExecutionJobs/*/operations/*}:cancel'
+    - post: '/v1beta1/{name=projects/*/locations/*/notebookRuntimes/*/operations/*}:cancel'
+    - post: '/v1beta1/{name=projects/*/locations/*/notebookRuntimeTemplates/*/operations/*}:cancel'
     - post: '/v1beta1/{name=projects/*/locations/*/persistentResources/*/operations/*}:cancel'
+    - post: '/v1beta1/{name=projects/*/locations/*/ragCorpora/*/operations/*}:cancel'
+    - post: '/v1beta1/{name=projects/*/locations/*/ragCorpora/*/ragFiles/*/operations/*}:cancel'
     - post: '/v1beta1/{name=projects/*/locations/*/studies/*/operations/*}:cancel'
     - post: '/v1beta1/{name=projects/*/locations/*/studies/*/trials/*/operations/*}:cancel'
     - post: '/v1beta1/{name=projects/*/locations/*/trainingPipelines/*/operations/*}:cancel'
@@ -300,6 +351,8 @@ http:
   - selector: google.longrunning.Operations.DeleteOperation
     delete: '/ui/{name=projects/*/locations/*/operations/*}'
     additional_bindings:
+    - delete: '/ui/{name=projects/*/locations/*/agents/*/operations/*}'
+    - delete: '/ui/{name=projects/*/locations/*/apps/*/operations/*}'
     - delete: '/ui/{name=projects/*/locations/*/datasets/*/operations/*}'
     - delete: '/ui/{name=projects/*/locations/*/datasets/*/dataItems/*/operations/*}'
     - delete: '/ui/{name=projects/*/locations/*/datasets/*/savedQueries/*/operations/*}'
@@ -327,6 +380,10 @@ http:
     - delete: '/ui/{name=projects/*/locations/*/migratableResources/*/operations/*}'
     - delete: '/ui/{name=projects/*/locations/*/models/*/operations/*}'
     - delete: '/ui/{name=projects/*/locations/*/models/*/evaluations/*/operations/*}'
+    - delete: '/ui/{name=projects/*/locations/*/notebookExecutionJobs/*/operations/*}'
+    - delete: '/ui/{name=projects/*/locations/*/notebookRuntimes/*/operations/*}'
+    - delete: '/ui/{name=projects/*/locations/*/notebookRuntimeTemplates/*/operations/*}'
+    - delete: '/ui/{name=projects/*/locations/*/persistentResources/*/operations/*}'
     - delete: '/ui/{name=projects/*/locations/*/studies/*/operations/*}'
     - delete: '/ui/{name=projects/*/locations/*/studies/*/trials/*/operations/*}'
     - delete: '/ui/{name=projects/*/locations/*/trainingPipelines/*/operations/*}'
@@ -340,8 +397,11 @@ http:
     - delete: '/ui/{name=projects/*/locations/*/featureOnlineStores/*/operations/*}'
     - delete: '/ui/{name=projects/*/locations/*/featureGroups/*/operations/*}'
     - delete: '/ui/{name=projects/*/locations/*/featureGroups/*/features/*/operations/*}'
+    - delete: '/ui/{name=projects/*/locations/*/featureGroups/*/featureMonitors/*/operations/*}'
     - delete: '/ui/{name=projects/*/locations/*/featureOnlineStores/*/featureViews/*/operations/*}'
     - delete: '/v1beta1/{name=projects/*/locations/*/operations/*}'
+    - delete: '/v1beta1/{name=projects/*/locations/*/agents/*/operations/*}'
+    - delete: '/v1beta1/{name=projects/*/locations/*/apps/*/operations/*}'
     - delete: '/v1beta1/{name=projects/*/locations/*/datasets/*/operations/*}'
     - delete: '/v1beta1/{name=projects/*/locations/*/datasets/*/dataItems/*/operations/*}'
     - delete: '/v1beta1/{name=projects/*/locations/*/datasets/*/savedQueries/*/operations/*}'
@@ -359,7 +419,6 @@ http:
     - delete: '/v1beta1/{name=projects/*/locations/*/exampleStores/*/operations/*}'
     - delete: '/v1beta1/{name=projects/*/locations/*/extensionControllers/*/operations/*}'
     - delete: '/v1beta1/{name=projects/*/locations/*/extensions/*/operations/*}'
-    - delete: '/v1beta1/{name=projects/*/locations/*/extensions/*/deployments/*/operations/*}'
     - delete: '/v1beta1/{name=projects/*/locations/*/hyperparameterTuningJobs/*/operations/*}'
     - delete: '/v1beta1/{name=projects/*/locations/*/indexes/*/operations/*}'
     - delete: '/v1beta1/{name=projects/*/locations/*/indexEndpoints/*/operations/*}'
@@ -372,7 +431,12 @@ http:
     - delete: '/v1beta1/{name=projects/*/locations/*/migratableResources/*/operations/*}'
     - delete: '/v1beta1/{name=projects/*/locations/*/models/*/operations/*}'
     - delete: '/v1beta1/{name=projects/*/locations/*/models/*/evaluations/*/operations/*}'
+    - delete: '/v1beta1/{name=projects/*/locations/*/notebookExecutionJobs/*/operations/*}'
+    - delete: '/v1beta1/{name=projects/*/locations/*/notebookRuntimes/*/operations/*}'
+    - delete: '/v1beta1/{name=projects/*/locations/*/notebookRuntimeTemplates/*/operations/*}'
     - delete: '/v1beta1/{name=projects/*/locations/*/persistentResources/*/operations/*}'
+    - delete: '/v1beta1/{name=projects/*/locations/*/ragCorpora/*/operations/*}'
+    - delete: '/v1beta1/{name=projects/*/locations/*/ragCorpora/*/ragFiles/*/operations/*}'
     - delete: '/v1beta1/{name=projects/*/locations/*/reasoningEngines/*/operations/*}'
     - delete: '/v1beta1/{name=projects/*/locations/*/solvers/*/operations/*}'
     - delete: '/v1beta1/{name=projects/*/locations/*/studies/*/operations/*}'
@@ -388,10 +452,13 @@ http:
     - delete: '/v1beta1/{name=projects/*/locations/*/featureOnlineStores/*/operations/*}'
     - delete: '/v1beta1/{name=projects/*/locations/*/featureGroups/*/operations/*}'
     - delete: '/v1beta1/{name=projects/*/locations/*/featureGroups/*/features/*/operations/*}'
+    - delete: '/v1beta1/{name=projects/*/locations/*/featureGroups/*/featureMonitors/*/operations/*}'
     - delete: '/v1beta1/{name=projects/*/locations/*/featureOnlineStores/*/featureViews/*/operations/*}'
   - selector: google.longrunning.Operations.GetOperation
     get: '/ui/{name=projects/*/locations/*/operations/*}'
     additional_bindings:
+    - get: '/ui/{name=projects/*/locations/*/agents/*/operations/*}'
+    - get: '/ui/{name=projects/*/locations/*/apps/*/operations/*}'
     - get: '/ui/{name=projects/*/locations/*/datasets/*/operations/*}'
     - get: '/ui/{name=projects/*/locations/*/datasets/*/dataItems/*/operations/*}'
     - get: '/ui/{name=projects/*/locations/*/datasets/*/savedQueries/*/operations/*}'
@@ -409,6 +476,7 @@ http:
     - get: '/ui/{name=projects/*/locations/*/customJobs/*/operations/*}'
     - get: '/ui/{name=projects/*/locations/*/dataLabelingJobs/*/operations/*}'
     - get: '/ui/{name=projects/*/locations/*/hyperparameterTuningJobs/*/operations/*}'
+    - get: '/ui/{name=projects/*/locations/*/tuningJobs/*/operations/*}'
     - get: '/ui/{name=projects/*/locations/*/indexes/*/operations/*}'
     - get: '/ui/{name=projects/*/locations/*/indexEndpoints/*/operations/*}'
     - get: '/ui/{name=projects/*/locations/*/metadataStores/*/operations/*}'
@@ -420,6 +488,10 @@ http:
     - get: '/ui/{name=projects/*/locations/*/migratableResources/*/operations/*}'
     - get: '/ui/{name=projects/*/locations/*/models/*/operations/*}'
     - get: '/ui/{name=projects/*/locations/*/models/*/evaluations/*/operations/*}'
+    - get: '/ui/{name=projects/*/locations/*/notebookExecutionJobs/*/operations/*}'
+    - get: '/ui/{name=projects/*/locations/*/notebookRuntimes/*/operations/*}'
+    - get: '/ui/{name=projects/*/locations/*/notebookRuntimeTemplates/*/operations/*}'
+    - get: '/ui/{name=projects/*/locations/*/persistentResources/*/operations/*}'
     - get: '/ui/{name=projects/*/locations/*/studies/*/operations/*}'
     - get: '/ui/{name=projects/*/locations/*/studies/*/trials/*/operations/*}'
     - get: '/ui/{name=projects/*/locations/*/trainingPipelines/*/operations/*}'
@@ -434,7 +506,10 @@ http:
     - get: '/ui/{name=projects/*/locations/*/featureOnlineStores/*/featureViews/*/operations/*}'
     - get: '/ui/{name=projects/*/locations/*/featureGroups/*/operations/*}'
     - get: '/ui/{name=projects/*/locations/*/featureGroups/*/features/*/operations/*}'
+    - get: '/ui/{name=projects/*/locations/*/featureGroups/*/featureMonitors/*/operations/*}'
     - get: '/v1beta1/{name=projects/*/locations/*/operations/*}'
+    - get: '/v1beta1/{name=projects/*/locations/*/agents/*/operations/*}'
+    - get: '/v1beta1/{name=projects/*/locations/*/apps/*/operations/*}'
     - get: '/v1beta1/{name=projects/*/locations/*/datasets/*/operations/*}'
     - get: '/v1beta1/{name=projects/*/locations/*/datasets/*/dataItems/*/operations/*}'
     - get: '/v1beta1/{name=projects/*/locations/*/datasets/*/savedQueries/*/operations/*}'
@@ -447,7 +522,6 @@ http:
     - get: '/v1beta1/{name=projects/*/locations/*/exampleStores/*/operations/*}'
     - get: '/v1beta1/{name=projects/*/locations/*/extensionControllers/*/operations/*}'
     - get: '/v1beta1/{name=projects/*/locations/*/extensions/*/operations/*}'
-    - get: '/v1beta1/{name=projects/*/locations/*/extensions/*/deployments/*/operations/*}'
     - get: '/v1beta1/{name=projects/*/locations/*/featurestores/*/operations/*}'
     - get: '/v1beta1/{name=projects/*/locations/*/featurestores/*/entityTypes/*/operations/*}'
     - get: '/v1beta1/{name=projects/*/locations/*/featurestores/*/entityTypes/*/features/*/operations/*}'
@@ -465,7 +539,12 @@ http:
     - get: '/v1beta1/{name=projects/*/locations/*/migratableResources/*/operations/*}'
     - get: '/v1beta1/{name=projects/*/locations/*/models/*/operations/*}'
     - get: '/v1beta1/{name=projects/*/locations/*/models/*/evaluations/*/operations/*}'
+    - get: '/v1beta1/{name=projects/*/locations/*/notebookExecutionJobs/*/operations/*}'
+    - get: '/v1beta1/{name=projects/*/locations/*/notebookRuntimes/*/operations/*}'
+    - get: '/v1beta1/{name=projects/*/locations/*/notebookRuntimeTemplates/*/operations/*}'
     - get: '/v1beta1/{name=projects/*/locations/*/persistentResources/*/operations/*}'
+    - get: '/v1beta1/{name=projects/*/locations/*/ragCorpora/*/operations/*}'
+    - get: '/v1beta1/{name=projects/*/locations/*/ragCorpora/*/ragFiles/*/operations/*}'
     - get: '/v1beta1/{name=projects/*/locations/*/reasoningEngines/*/operations/*}'
     - get: '/v1beta1/{name=projects/*/locations/*/solvers/*/operations/*}'
     - get: '/v1beta1/{name=projects/*/locations/*/studies/*/operations/*}'
@@ -482,9 +561,12 @@ http:
     - get: '/v1beta1/{name=projects/*/locations/*/featureOnlineStores/*/featureViews/*/operations/*}'
     - get: '/v1beta1/{name=projects/*/locations/*/featureGroups/*/operations/*}'
     - get: '/v1beta1/{name=projects/*/locations/*/featureGroups/*/features/*/operations/*}'
+    - get: '/v1beta1/{name=projects/*/locations/*/featureGroups/*/featureMonitors/*/operations/*}'
   - selector: google.longrunning.Operations.ListOperations
     get: '/ui/{name=projects/*/locations/*}/operations'
     additional_bindings:
+    - get: '/ui/{name=projects/*/locations/*/agents/*}/operations'
+    - get: '/ui/{name=projects/*/locations/*/apps/*}/operations'
     - get: '/ui/{name=projects/*/locations/*/datasets/*}/operations'
     - get: '/ui/{name=projects/*/locations/*/datasets/*/dataItems/*}/operations'
     - get: '/ui/{name=projects/*/locations/*/datasets/*/savedQueries/*}/operations'
@@ -501,6 +583,7 @@ http:
     - get: '/ui/{name=projects/*/locations/*/customJobs/*}/operations'
     - get: '/ui/{name=projects/*/locations/*/dataLabelingJobs/*}/operations'
     - get: '/ui/{name=projects/*/locations/*/hyperparameterTuningJobs/*}/operations'
+    - get: '/ui/{name=projects/*/locations/*/tuningJobs/*}/operations'
     - get: '/ui/{name=projects/*/locations/*/indexes/*}/operations'
     - get: '/ui/{name=projects/*/locations/*/indexEndpoints/*}/operations'
     - get: '/ui/{name=projects/*/locations/*/metadataStores/*}/operations'
@@ -512,9 +595,13 @@ http:
     - get: '/ui/{name=projects/*/locations/*/migratableResources/*}/operations'
     - get: '/ui/{name=projects/*/locations/*/models/*}/operations'
     - get: '/ui/{name=projects/*/locations/*/models/*/evaluations/*}/operations'
+    - get: '/ui/{name=projects/*/locations/*/notebookExecutionJobs/*}/operations'
+    - get: '/ui/{name=projects/*/locations/*/notebookRuntimes/*}/operations'
+    - get: '/ui/{name=projects/*/locations/*/notebookRuntimeTemplates/*}/operations'
     - get: '/ui/{name=projects/*/locations/*/studies/*}/operations'
     - get: '/ui/{name=projects/*/locations/*/studies/*/trials/*}/operations'
     - get: '/ui/{name=projects/*/locations/*/trainingPipelines/*}/operations'
+    - get: '/ui/{name=projects/*/locations/*/persistentResources/*}/operations'
     - get: '/ui/{name=projects/*/locations/*/pipelineJobs/*}/operations'
     - get: '/ui/{name=projects/*/locations/*/schedules/*}/operations'
     - get: '/ui/{name=projects/*/locations/*/specialistPools/*}/operations'
@@ -526,7 +613,10 @@ http:
     - get: '/ui/{name=projects/*/locations/*/featureOnlineStores/*/featureViews/*/operations/*}:wait'
     - get: '/ui/{name=projects/*/locations/*/featureGroups/*/operations/*}:wait'
     - get: '/ui/{name=projects/*/locations/*/featureGroups/*/features/*/operations/*}:wait'
+    - get: '/ui/{name=projects/*/locations/*/featureGroups/*/featureMonitors/*/operations/*}:wait'
     - get: '/v1beta1/{name=projects/*/locations/*}/operations'
+    - get: '/v1beta1/{name=projects/*/locations/*/agents/*}/operations'
+    - get: '/v1beta1/{name=projects/*/locations/*/apps/*}/operations'
     - get: '/v1beta1/{name=projects/*/locations/*/datasets/*}/operations'
     - get: '/v1beta1/{name=projects/*/locations/*/datasets/*/dataItems/*}/operations'
     - get: '/v1beta1/{name=projects/*/locations/*/datasets/*/savedQueries/*}/operations'
@@ -539,7 +629,6 @@ http:
     - get: '/v1beta1/{name=projects/*/locations/*/exampleStores/*}/operations'
     - get: '/v1beta1/{name=projects/*/locations/*/extensionControllers/*}/operations'
     - get: '/v1beta1/{name=projects/*/locations/*/extensions/*}/operations'
-    - get: '/v1beta1/{name=projects/*/locations/*/extensions/*/deployments/*}/operations'
     - get: '/v1beta1/{name=projects/*/locations/*/featurestores/*}/operations'
     - get: '/v1beta1/{name=projects/*/locations/*/featurestores/*/entityTypes/*}/operations'
     - get: '/v1beta1/{name=projects/*/locations/*/featurestores/*/entityTypes/*/features/*}/operations'
@@ -557,7 +646,12 @@ http:
     - get: '/v1beta1/{name=projects/*/locations/*/migratableResources/*}/operations'
     - get: '/v1beta1/{name=projects/*/locations/*/models/*}/operations'
     - get: '/v1beta1/{name=projects/*/locations/*/models/*/evaluations/*}/operations'
+    - get: '/v1beta1/{name=projects/*/locations/*/notebookExecutionJobs/*}/operations'
+    - get: '/v1beta1/{name=projects/*/locations/*/notebookRuntimes/*}/operations'
+    - get: '/v1beta1/{name=projects/*/locations/*/notebookRuntimeTemplates/*}/operations'
     - get: '/v1beta1/{name=projects/*/locations/*/persistentResources/*}/operations'
+    - get: '/v1beta1/{name=projects/*/locations/*/ragCorpora/*}/operations'
+    - get: '/v1beta1/{name=projects/*/locations/*/ragCorpora/*/ragFiles/*}/operations'
     - get: '/v1beta1/{name=projects/*/locations/*/reasoningEngines/*}/operations'
     - get: '/v1beta1/{name=projects/*/locations/*/solvers/*}/operations'
     - get: '/v1beta1/{name=projects/*/locations/*/studies/*}/operations'
@@ -574,9 +668,12 @@ http:
     - get: '/v1beta1/{name=projects/*/locations/*/featureOnlineStores/*/featureViews/*}/operations'
     - get: '/v1beta1/{name=projects/*/locations/*/featureGroups/*}/operations'
     - get: '/v1beta1/{name=projects/*/locations/*/featureGroups/*/features/*}/operations'
+    - get: '/v1beta1/{name=projects/*/locations/*/featureGroups/*/featureMonitors/*}/operations'
   - selector: google.longrunning.Operations.WaitOperation
     post: '/ui/{name=projects/*/locations/*/operations/*}:wait'
     additional_bindings:
+    - post: '/ui/{name=projects/*/locations/*/agents/*/operations/*}:wait'
+    - post: '/ui/{name=projects/*/locations/*/apps/*/operations/*}:wait'
     - post: '/ui/{name=projects/*/locations/*/datasets/*/operations/*}:wait'
     - post: '/ui/{name=projects/*/locations/*/datasets/*/dataItems/*/operations/*}:wait'
     - post: '/ui/{name=projects/*/locations/*/datasets/*/savedQueries/*/operations/*}:wait'
@@ -593,6 +690,7 @@ http:
     - post: '/ui/{name=projects/*/locations/*/customJobs/*/operations/*}:wait'
     - post: '/ui/{name=projects/*/locations/*/dataLabelingJobs/*/operations/*}:wait'
     - post: '/ui/{name=projects/*/locations/*/hyperparameterTuningJobs/*/operations/*}:wait'
+    - post: '/ui/{name=projects/*/locations/*/tuningJobs/*/operations/*}:wait'
     - post: '/ui/{name=projects/*/locations/*/indexes/*/operations/*}:wait'
     - post: '/ui/{name=projects/*/locations/*/indexEndpoints/*/operations/*}:wait'
     - post: '/ui/{name=projects/*/locations/*/metadataStores/*/operations/*}:wait'
@@ -604,9 +702,13 @@ http:
     - post: '/ui/{name=projects/*/locations/*/migratableResources/*/operations/*}:wait'
     - post: '/ui/{name=projects/*/locations/*/models/*/operations/*}:wait'
     - post: '/ui/{name=projects/*/locations/*/models/*/evaluations/*/operations/*}:wait'
+    - post: '/ui/{name=projects/*/locations/*/notebookExecutionJobs/*/operations/*}:wait'
+    - post: '/ui/{name=projects/*/locations/*/notebookRuntimes/*/operations/*}:wait'
+    - post: '/ui/{name=projects/*/locations/*/notebookRuntimeTemplates/*/operations/*}:wait'
     - post: '/ui/{name=projects/*/locations/*/studies/*/operations/*}:wait'
     - post: '/ui/{name=projects/*/locations/*/studies/*/trials/*/operations/*}:wait'
     - post: '/ui/{name=projects/*/locations/*/trainingPipelines/*/operations/*}:wait'
+    - post: '/ui/{name=projects/*/locations/*/persistentResources/*/operations/*}:wait'
     - post: '/ui/{name=projects/*/locations/*/pipelineJobs/*/operations/*}:wait'
     - post: '/ui/{name=projects/*/locations/*/schedules/*/operations/*}:wait'
     - post: '/ui/{name=projects/*/locations/*/specialistPools/*/operations/*}:wait'
@@ -618,7 +720,10 @@ http:
     - post: '/ui/{name=projects/*/locations/*/featureOnlineStores/*/featureViews/*/operations/*}:wait'
     - post: '/ui/{name=projects/*/locations/*/featureGroups/*/operations/*}:wait'
     - post: '/ui/{name=projects/*/locations/*/featureGroups/*/features/*/operations/*}:wait'
+    - post: '/ui/{name=projects/*/locations/*/featureGroups/*/featureMonitors/*/operations/*}:wait'
     - post: '/v1beta1/{name=projects/*/locations/*/operations/*}:wait'
+    - post: '/v1beta1/{name=projects/*/locations/*/agents/*/operations/*}:wait'
+    - post: '/v1beta1/{name=projects/*/locations/*/apps/*/operations/*}:wait'
     - post: '/v1beta1/{name=projects/*/locations/*/datasets/*/operations/*}:wait'
     - post: '/v1beta1/{name=projects/*/locations/*/datasets/*/dataItems/*/operations/*}:wait'
     - post: '/v1beta1/{name=projects/*/locations/*/datasets/*/savedQueries/*/operations/*}:wait'
@@ -631,7 +736,6 @@ http:
     - post: '/v1beta1/{name=projects/*/locations/*/exampleStores/*/operations/*}:wait'
     - post: '/v1beta1/{name=projects/*/locations/*/extensionControllers/*/operations/*}:wait'
     - post: '/v1beta1/{name=projects/*/locations/*/extensions/*/operations/*}:wait'
-    - post: '/v1beta1/{name=projects/*/locations/*/extensions/*/deployments/*/operations/*}:wait'
     - post: '/v1beta1/{name=projects/*/locations/*/featurestores/*/operations/*}:wait'
     - post: '/v1beta1/{name=projects/*/locations/*/featurestores/*/entityTypes/*/operations/*}:wait'
     - post: '/v1beta1/{name=projects/*/locations/*/featurestores/*/entityTypes/*/features/*/operations/*}:wait'
@@ -649,7 +753,12 @@ http:
     - post: '/v1beta1/{name=projects/*/locations/*/migratableResources/*/operations/*}:wait'
     - post: '/v1beta1/{name=projects/*/locations/*/models/*/operations/*}:wait'
     - post: '/v1beta1/{name=projects/*/locations/*/models/*/evaluations/*/operations/*}:wait'
+    - post: '/v1beta1/{name=projects/*/locations/*/notebookExecutionJobs/*/operations/*}:wait'
+    - post: '/v1beta1/{name=projects/*/locations/*/notebookRuntimes/*/operations/*}:wait'
+    - post: '/v1beta1/{name=projects/*/locations/*/notebookRuntimeTemplates/*/operations/*}:wait'
     - post: '/v1beta1/{name=projects/*/locations/*/persistentResources/*/operations/*}:wait'
+    - post: '/v1beta1/{name=projects/*/locations/*/ragCorpora/*/operations/*}:wait'
+    - post: '/v1beta1/{name=projects/*/locations/*/ragCorpora/*/ragFiles/*/operations/*}:wait'
     - post: '/v1beta1/{name=projects/*/locations/*/reasoningEngines/*/operations/*}:wait'
     - post: '/v1beta1/{name=projects/*/locations/*/studies/*/operations/*}:wait'
     - post: '/v1beta1/{name=projects/*/locations/*/studies/*/trials/*/operations/*}:wait'
@@ -665,6 +774,7 @@ http:
     - post: '/v1beta1/{name=projects/*/locations/*/featureOnlineStores/*/featureViews/*/operations/*}:wait'
     - post: '/v1beta1/{name=projects/*/locations/*/featureGroups/*/operations/*}:wait'
     - post: '/v1beta1/{name=projects/*/locations/*/featureGroups/*/features/*/operations/*}:wait'
+    - post: '/v1beta1/{name=projects/*/locations/*/featureGroups/*/featureMonitors/*/operations/*}:wait'
 
 authentication:
   rules:
@@ -680,15 +790,27 @@ authentication:
     oauth:
       canonical_scopes: |-
         https://www.googleapis.com/auth/cloud-platform
+  - selector: google.cloud.aiplatform.v1beta1.EvaluationService.EvaluateInstances
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: google.cloud.aiplatform.v1beta1.ExtensionExecutionService.ExecuteExtension
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: google.cloud.aiplatform.v1beta1.ExtensionExecutionService.QueryExtension
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: 'google.cloud.aiplatform.v1beta1.ExtensionRegistryService.*'
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
   - selector: 'google.cloud.aiplatform.v1beta1.FeatureOnlineStoreAdminService.*'
     oauth:
       canonical_scopes: |-
         https://www.googleapis.com/auth/cloud-platform
-  - selector: google.cloud.aiplatform.v1beta1.FeatureOnlineStoreService.FetchFeatureValues
-    oauth:
-      canonical_scopes: |-
-        https://www.googleapis.com/auth/cloud-platform
-  - selector: google.cloud.aiplatform.v1beta1.FeatureOnlineStoreService.SearchNearestEntities
+  - selector: 'google.cloud.aiplatform.v1beta1.FeatureOnlineStoreService.*'
     oauth:
       canonical_scopes: |-
         https://www.googleapis.com/auth/cloud-platform
@@ -701,6 +823,14 @@ authentication:
       canonical_scopes: |-
         https://www.googleapis.com/auth/cloud-platform
   - selector: 'google.cloud.aiplatform.v1beta1.FeaturestoreService.*'
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: 'google.cloud.aiplatform.v1beta1.GenAiCacheService.*'
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: 'google.cloud.aiplatform.v1beta1.GenAiTuningService.*'
     oauth:
       canonical_scopes: |-
         https://www.googleapis.com/auth/cloud-platform
@@ -745,15 +875,19 @@ authentication:
     oauth:
       canonical_scopes: |-
         https://www.googleapis.com/auth/cloud-platform
-  - selector: google.cloud.aiplatform.v1beta1.ModelGardenService.GetPublisherModel
+  - selector: 'google.cloud.aiplatform.v1beta1.ModelGardenService.*'
     oauth:
       canonical_scopes: |-
         https://www.googleapis.com/auth/cloud-platform
-  - selector: google.cloud.aiplatform.v1beta1.ModelGardenService.ListPublisherModels
+  - selector: 'google.cloud.aiplatform.v1beta1.ModelMonitoringService.*'
     oauth:
       canonical_scopes: |-
         https://www.googleapis.com/auth/cloud-platform
   - selector: 'google.cloud.aiplatform.v1beta1.ModelService.*'
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: 'google.cloud.aiplatform.v1beta1.NotebookService.*'
     oauth:
       canonical_scopes: |-
         https://www.googleapis.com/auth/cloud-platform
@@ -768,6 +902,19 @@ authentication:
   - selector: 'google.cloud.aiplatform.v1beta1.PredictionService.*'
     oauth:
       canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform,
+        https://www.googleapis.com/auth/cloud-platform.read-only
+  - selector: google.cloud.aiplatform.v1beta1.ReasoningEngineExecutionService.QueryReasoningEngine
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: google.cloud.aiplatform.v1beta1.ReasoningEngineExecutionService.StreamQueryReasoningEngine
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: 'google.cloud.aiplatform.v1beta1.ReasoningEngineService.*'
+    oauth:
+      canonical_scopes: |-
         https://www.googleapis.com/auth/cloud-platform
   - selector: 'google.cloud.aiplatform.v1beta1.ScheduleService.*'
     oauth:
@@ -778,6 +925,14 @@ authentication:
       canonical_scopes: |-
         https://www.googleapis.com/auth/cloud-platform
   - selector: 'google.cloud.aiplatform.v1beta1.TensorboardService.*'
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: 'google.cloud.aiplatform.v1beta1.VertexRagDataService.*'
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: 'google.cloud.aiplatform.v1beta1.VertexRagService.*'
     oauth:
       canonical_scopes: |-
         https://www.googleapis.com/auth/cloud-platform
@@ -803,13 +958,31 @@ authentication:
         https://www.googleapis.com/auth/cloud-platform
 
 publishing:
+  new_issue_uri: https://issuetracker.google.com/issues/new?component=1130925&template=1637248
   documentation_uri: https://cloud.google.com/ai-platform/docs
   github_label: 'api: aiplatform'
   organization: CLOUD
   library_settings:
   - version: google.cloud.aiplatform.v1beta1
+    java_settings:
+      common: {}
+    cpp_settings:
+      common: {}
+    php_settings:
+      common: {}
+    python_settings:
+      common: {}
+      experimental_features:
+        rest_async_io_enabled: true
+    node_settings:
+      common: {}
     dotnet_settings:
+      common: {}
       renamed_resources:
         datalabeling.googleapis.com/Dataset: DataLabelingDataset
         automl.googleapis.com/Dataset: AutoMLDataset
         automl.googleapis.com/Model: AutoMLModel
+    ruby_settings:
+      common: {}
+    go_settings:
+      common: {}

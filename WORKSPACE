@@ -93,18 +93,29 @@ load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
 
 rules_pkg_dependencies()
 
-# This must be above the download of gRPC (in C++ section) and 
-# rules_gapic_repositories because both depend on rules_go and we need to manage
-# our version of rules_go explicitly rather than depend on the version those
-# bring in transitively.
-_io_bazel_rules_go_version = "0.44.2"
+# This and gazelle must be above the download of gRPC (in C++ section) and
+# rules_gapic_repositories because both depend on them and we need to manage
+# our versions explicitly rather than depend on the version those bring in
+# transitively.
+_io_bazel_rules_go_version = "0.46.0"
 
 http_archive(
     name = "io_bazel_rules_go",
-    sha256 = "7c76d6236b28ff695aa28cf35f95de317a9472fd1fb14ac797c9bf684f09b37c",
+    sha256 = "80a98277ad1311dacd837f9b16db62887702e9f1d1c4c9f796d0121a46c8e184",
     urls = [
         "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v{0}/rules_go-v{0}.zip".format(_io_bazel_rules_go_version),
         "https://github.com/bazelbuild/rules_go/releases/download/v{0}/rules_go-v{0}.zip".format(_io_bazel_rules_go_version),
+    ],
+)
+
+_bazel_gazelle_version = "0.36.0"
+
+http_archive(
+    name = "bazel_gazelle",
+    sha256 = "75df288c4b31c81eb50f51e2e14f4763cb7548daae126817247064637fd9ea62",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v{0}/bazel-gazelle-v{0}.tar.gz".format(_bazel_gazelle_version),
+        "https://github.com/bazelbuild/bazel-gazelle/releases/download/v{0}/bazel-gazelle-v{0}.tar.gz".format(_bazel_gazelle_version),
     ],
 )
 
@@ -138,9 +149,9 @@ http_archive(
 
 # Explicitly declaring Protobuf version, while Protobuf dependency is already
 # instantiated in grpc_deps().
-_protobuf_version = "25.2"
+_protobuf_version = "25.3"
 
-_protobuf_sha256 = "8ff511a64fc46ee792d3fe49a5a1bcad6f7dc50dfbba5a28b0e5b979c17f9871"
+_protobuf_sha256 = "d19643d265b978383352b3143f04c0641eea75a75235c111cc01a1350173180e"
 
 http_archive(
     name = "com_google_protobuf",
@@ -153,7 +164,8 @@ load("@com_github_grpc_grpc//bazel:grpc_deps.bzl", "grpc_deps")
 
 grpc_deps()
 
-load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps", "PROTOBUF_MAVEN_ARTIFACTS")
+load("@com_google_protobuf//:protobuf_deps.bzl", "PROTOBUF_MAVEN_ARTIFACTS", "protobuf_deps")
+
 # This is actually already done within grpc_deps but calling this for Bazel convention.
 protobuf_deps()
 
@@ -197,36 +209,13 @@ rules_proto_toolchains()
 # version of rules_gapic.
 _rules_gapic_version = "1.0.0"
 
-
 http_archive(
     name = "rules_gapic",
     strip_prefix = "rules_gapic-%s" % _rules_gapic_version,
     urls = ["https://github.com/googleapis/rules_gapic/archive/v%s.tar.gz" % _rules_gapic_version],
 )
 
-# Gazelle dependency version should match gazelle dependency expected by gRPC
-_bazel_gazelle_version = "0.24.0"
-
-http_archive(
-    name = "bazel_gazelle",
-    sha256 = "de69a09dc70417580aabf20a28619bb3ef60d038470c7cf8442fafcf627c21cb",
-    urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v{0}/bazel-gazelle-v{0}.tar.gz".format(_bazel_gazelle_version),
-        "https://github.com/bazelbuild/bazel-gazelle/releases/download/v{0}/bazel-gazelle-v{0}.tar.gz".format(_bazel_gazelle_version),
-    ],
-)
-
-# This overrides the package name @go_googleapis to point at this package,
-# @com_google_googleapis, which has the latest versions of all protos and is the
-# source of truth for those protos. This prevents rules_go from loading its own,
-# conflicting copy of googleapis under this package name, which would create
-# package collisions during compilation.
-local_repository(
-    name = "go_googleapis",
-    path = ".",
-)
-
-_gapic_generator_go_version = "0.40.0"
+_gapic_generator_go_version = "0.50.0"
 
 http_archive(
     name = "com_googleapis_gapic_generator_go",
@@ -243,7 +232,7 @@ com_googleapis_gapic_generator_go_repositories()
 # dependencies of gapic-generator-go.
 load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 
-go_register_toolchains(version = "1.19.13")
+go_register_toolchains(version = "1.21.13")
 
 go_rules_dependencies()
 
@@ -266,27 +255,7 @@ rules_gapic_repositories()
 
 load("@rules_jvm_external//:defs.bzl", "maven_install")
 
-maven_install(
-    artifacts = PROTOBUF_MAVEN_ARTIFACTS,
-    generate_compat_repositories = True,
-    repositories = [
-        "https://repo.maven.apache.org/maven2/",
-    ],
-)
-
-_gapic_generator_java_version = "2.35.0"
-
-maven_install(
-    artifacts = [
-        "com.google.api:gapic-generator-java:" + _gapic_generator_java_version,
-    ],
-    #Update this False for local development
-    fail_on_missing_checksum = True,
-    repositories = [
-        "m2Local",
-        "https://repo.maven.apache.org/maven2/",
-    ]
-)
+_gapic_generator_java_version = "2.51.0"
 
 http_archive(
     name = "gapic_generator_java",
@@ -312,9 +281,31 @@ load("@com_google_api_gax_java//:repositories.bzl", "com_google_api_gax_java_rep
 
 com_google_api_gax_java_repositories()
 
-load("@io_grpc_grpc_java//:repositories.bzl", "grpc_java_repositories")
+load("@io_grpc_grpc_java//:repositories.bzl", "IO_GRPC_GRPC_JAVA_ARTIFACTS", "grpc_java_repositories")
 
 grpc_java_repositories()
+
+load("@envoy_api//bazel:repositories.bzl", "api_dependencies")
+
+api_dependencies()
+
+maven_install(
+    artifacts = [
+                    "com.google.api:gapic-generator-java:" + _gapic_generator_java_version,
+                ] + PROTOBUF_MAVEN_ARTIFACTS +
+                IO_GRPC_GRPC_JAVA_ARTIFACTS,
+    #Update this False for local development
+    fail_on_missing_checksum = True,
+    generate_compat_repositories = True,
+    repositories = [
+        "m2Local",
+        "https://repo.maven.apache.org/maven2/",
+    ],
+)
+
+load("@maven//:compat.bzl", "compat_repositories")
+
+compat_repositories()
 
 ##############################################################################
 # Python
@@ -323,10 +314,13 @@ load("@rules_gapic//python:py_gapic_repositories.bzl", "py_gapic_repositories")
 
 py_gapic_repositories()
 
-_gapic_generator_python_version = "1.14.3"
+_gapic_generator_python_version = "1.21.0"
+
+_gapic_generator_python_sha256 = "3d699e92bf6b6b30da8be030900cfbe293b7d0bfa2a26c580ee790f51ae593df"
 
 http_archive(
     name = "gapic_generator_python",
+    sha256 = _gapic_generator_python_sha256,
     strip_prefix = "gapic-generator-python-%s" % _gapic_generator_python_version,
     urls = ["https://github.com/googleapis/gapic-generator-python/archive/v%s.zip" % _gapic_generator_python_version],
 )
@@ -336,7 +330,6 @@ load(
     "gapic_generator_python",
     "gapic_generator_register_toolchains",
 )
-
 load("@rules_python//python:repositories.bzl", "py_repositories")
 
 py_repositories()
@@ -360,9 +353,9 @@ gapic_generator_register_toolchains()
 # TypeScript
 ##############################################################################
 
-_gapic_generator_typescript_version = "4.4.2"
+_gapic_generator_typescript_version = "4.6.1"
 
-_gapic_generator_typescript_sha256 = "6cc1c90a0e5dfb7bbb4e58feb1fbb3c49290da7d064ae55e5a127408efaf101f"
+_gapic_generator_typescript_sha256 = "80a3fb3ab55f581ca020b89550ea5c7d3b269e1cae4935605cf9e9d13eb26b3f"
 
 ### TypeScript generator
 http_archive(
@@ -372,32 +365,39 @@ http_archive(
     urls = ["https://github.com/googleapis/gapic-generator-typescript/archive/v%s.tar.gz" % _gapic_generator_typescript_version],
 )
 
-load("@gapic_generator_typescript//:repositories.bzl", "gapic_generator_typescript_repositories", "NODE_VERSION")
+load("@gapic_generator_typescript//:repositories.bzl", "NODE_VERSION", "gapic_generator_typescript_repositories")
+
 gapic_generator_typescript_repositories()
 
 load("@aspect_rules_js//js:repositories.bzl", "rules_js_dependencies")
+
 rules_js_dependencies()
 
 load("@aspect_rules_ts//ts:repositories.bzl", "rules_ts_dependencies")
+
 rules_ts_dependencies(
     ts_version_from = "@gapic_generator_typescript//:package.json",
 )
 
 load("@rules_nodejs//nodejs:repositories.bzl", "nodejs_register_toolchains")
+
 nodejs_register_toolchains(
-  name = "nodejs",
-  node_version = NODE_VERSION,
+    name = "nodejs",
+    node_version = NODE_VERSION,
 )
 
 load("@aspect_rules_js//npm:npm_import.bzl", "npm_translate_lock", "pnpm_repository")
+
 npm_translate_lock(
-  name = "npm",
-  pnpm_lock = "@gapic_generator_typescript//:pnpm-lock.yaml",
-  data = ["@gapic_generator_typescript//:package.json"],
+    name = "npm",
+    data = ["@gapic_generator_typescript//:package.json"],
+    pnpm_lock = "@gapic_generator_typescript//:pnpm-lock.yaml",
 )
 
 load("@npm//:repositories.bzl", "npm_repositories")
+
 npm_repositories()
+
 pnpm_repository(name = "pnpm")
 
 ##############################################################################
@@ -405,7 +405,7 @@ pnpm_repository(name = "pnpm")
 ##############################################################################
 
 # PHP micro-generator
-_gapic_generator_php_version = "1.10.0"
+_gapic_generator_php_version = "1.18.0"
 
 http_archive(
     name = "gapic_generator_php",
@@ -438,9 +438,9 @@ http_archive(
     urls = ["https://github.com/googleapis/gax-dotnet/archive/refs/tags/%s.tar.gz" % _gax_dotnet_version],
 )
 
-_gapic_generator_csharp_version = "1.4.24"
+_gapic_generator_csharp_version = "1.4.32"
 
-_gapic_generator_csharp_sha256 = "e163e1a1289d052942c7c2bf6736fa57c08e082ecadc07b949cd1bded7502612"
+_gapic_generator_csharp_sha256 = "b29078c87d6c0e15ba34ece8365ec5fda90c66e9c7f5ab51fa14a067f3685012"
 
 http_archive(
     name = "gapic_generator_csharp",
@@ -457,9 +457,9 @@ gapic_generator_csharp_repositories()
 # Ruby
 ##############################################################################
 
-_gapic_generator_ruby_version = "v0.29.0"
+_gapic_generator_ruby_version = "v0.38.3"
 
-_gapic_generator_ruby_sha256 = "21d8c448e99eef6a2d8182f0422c70f8adddf9fc333d6c739e47720702ce52df"
+_gapic_generator_ruby_sha256 = "08cc9302b45229ff4acef29a6ca7cdb6a433db353c5ecf94ae1ab194c5c59a2b"
 
 http_archive(
     name = "gapic_generator_ruby",
@@ -476,7 +476,7 @@ gapic_generator_ruby_repositories()
 # Discovery
 ##############################################################################
 
-_disco_to_proto3_converter_version = "8163e5ea8d8dbcf0899534d2895819ab135ffab5"
+_disco_to_proto3_converter_version = "285877db097dded2d988e9882240c83c7f9c3df4"
 
 http_archive(
     name = "com_google_disco_to_proto3_converter",

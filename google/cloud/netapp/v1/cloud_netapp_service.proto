@@ -1,4 +1,4 @@
-// Copyright 2023 Google LLC
+// Copyright 2024 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -106,6 +106,34 @@ service NetApp {
     option (google.api.method_signature) = "name";
     option (google.longrunning.operation_info) = {
       response_type: "google.protobuf.Empty"
+      metadata_type: "OperationMetadata"
+    };
+  }
+
+  // ValidateDirectoryService does a connectivity check for a directory service
+  // policy attached to the storage pool.
+  rpc ValidateDirectoryService(ValidateDirectoryServiceRequest)
+      returns (google.longrunning.Operation) {
+    option (google.api.http) = {
+      post: "/v1/{name=projects/*/locations/*/storagePools/*}:validateDirectoryService"
+      body: "*"
+    };
+    option (google.longrunning.operation_info) = {
+      response_type: "google.protobuf.Empty"
+      metadata_type: "OperationMetadata"
+    };
+  }
+
+  // This operation will switch the active/replica zone for a regional
+  // storagePool.
+  rpc SwitchActiveReplicaZone(SwitchActiveReplicaZoneRequest)
+      returns (google.longrunning.Operation) {
+    option (google.api.http) = {
+      post: "/v1/{name=projects/*/locations/*/storagePools/*}:switch"
+      body: "*"
+    };
+    option (google.longrunning.operation_info) = {
+      response_type: "StoragePool"
       metadata_type: "OperationMetadata"
     };
   }
@@ -465,6 +493,33 @@ service NetApp {
       returns (google.longrunning.Operation) {
     option (google.api.http) = {
       post: "/v1/{name=projects/*/locations/*/volumes/*/replications/*}:reverseDirection"
+      body: "*"
+    };
+    option (google.longrunning.operation_info) = {
+      response_type: "Replication"
+      metadata_type: "OperationMetadata"
+    };
+  }
+
+  // Establish replication peering.
+  rpc EstablishPeering(EstablishPeeringRequest)
+      returns (google.longrunning.Operation) {
+    option (google.api.http) = {
+      post: "/v1/{name=projects/*/locations/*/volumes/*/replications/*}:establishPeering"
+      body: "*"
+    };
+    option (google.longrunning.operation_info) = {
+      response_type: "Replication"
+      metadata_type: "OperationMetadata"
+    };
+  }
+
+  // Syncs the replication. This will invoke one time volume data transfer from
+  // source to destination.
+  rpc SyncReplication(SyncReplicationRequest)
+      returns (google.longrunning.Operation) {
+    option (google.api.http) = {
+      post: "/v1/{name=projects/*/locations/*/volumes/*/replications/*}:sync"
       body: "*"
     };
     option (google.longrunning.operation_info) = {

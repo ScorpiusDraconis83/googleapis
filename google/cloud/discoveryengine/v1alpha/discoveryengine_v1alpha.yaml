@@ -4,15 +4,26 @@ name: discoveryengine.googleapis.com
 title: Discovery Engine API
 
 apis:
+- name: google.cloud.discoveryengine.v1alpha.AclConfigService
+- name: google.cloud.discoveryengine.v1alpha.ChunkService
 - name: google.cloud.discoveryengine.v1alpha.CompletionService
+- name: google.cloud.discoveryengine.v1alpha.ControlService
 - name: google.cloud.discoveryengine.v1alpha.ConversationalSearchService
 - name: google.cloud.discoveryengine.v1alpha.DataStoreService
 - name: google.cloud.discoveryengine.v1alpha.DocumentService
 - name: google.cloud.discoveryengine.v1alpha.EngineService
+- name: google.cloud.discoveryengine.v1alpha.EstimateBillingService
+- name: google.cloud.discoveryengine.v1alpha.EvaluationService
+- name: google.cloud.discoveryengine.v1alpha.GroundedGenerationService
+- name: google.cloud.discoveryengine.v1alpha.ProjectService
+- name: google.cloud.discoveryengine.v1alpha.RankService
 - name: google.cloud.discoveryengine.v1alpha.RecommendationService
+- name: google.cloud.discoveryengine.v1alpha.SampleQueryService
+- name: google.cloud.discoveryengine.v1alpha.SampleQuerySetService
 - name: google.cloud.discoveryengine.v1alpha.SchemaService
 - name: google.cloud.discoveryengine.v1alpha.SearchService
 - name: google.cloud.discoveryengine.v1alpha.SearchTuningService
+- name: google.cloud.discoveryengine.v1alpha.ServingConfigService
 - name: google.cloud.discoveryengine.v1alpha.SiteSearchEngineService
 - name: google.cloud.discoveryengine.v1alpha.UserEventService
 - name: google.cloud.location.Locations
@@ -20,10 +31,14 @@ apis:
 
 types:
 - name: google.cloud.discoveryengine.logging.ErrorLog
+- name: google.cloud.discoveryengine.v1alpha.AclConfig
+- name: google.cloud.discoveryengine.v1alpha.Answer
 - name: google.cloud.discoveryengine.v1alpha.BatchCreateTargetSiteMetadata
 - name: google.cloud.discoveryengine.v1alpha.BatchCreateTargetSitesResponse
+- name: google.cloud.discoveryengine.v1alpha.Control
 - name: google.cloud.discoveryengine.v1alpha.CreateDataStoreMetadata
 - name: google.cloud.discoveryengine.v1alpha.CreateEngineMetadata
+- name: google.cloud.discoveryengine.v1alpha.CreateEvaluationMetadata
 - name: google.cloud.discoveryengine.v1alpha.CreateSchemaMetadata
 - name: google.cloud.discoveryengine.v1alpha.CreateTargetSiteMetadata
 - name: google.cloud.discoveryengine.v1alpha.DataStore
@@ -37,18 +52,38 @@ types:
 - name: google.cloud.discoveryengine.v1alpha.EnableAdvancedSiteSearchMetadata
 - name: google.cloud.discoveryengine.v1alpha.EnableAdvancedSiteSearchResponse
 - name: google.cloud.discoveryengine.v1alpha.Engine
+- name: google.cloud.discoveryengine.v1alpha.EstimateDataSizeMetadata
+- name: google.cloud.discoveryengine.v1alpha.EstimateDataSizeResponse
+- name: google.cloud.discoveryengine.v1alpha.Evaluation
 - name: google.cloud.discoveryengine.v1alpha.FieldConfig
+- name: google.cloud.discoveryengine.v1alpha.GetUriPatternDocumentDataResponse
+- name: google.cloud.discoveryengine.v1alpha.ImportCompletionSuggestionsMetadata
+- name: google.cloud.discoveryengine.v1alpha.ImportCompletionSuggestionsResponse
 - name: google.cloud.discoveryengine.v1alpha.ImportDocumentsMetadata
 - name: google.cloud.discoveryengine.v1alpha.ImportDocumentsResponse
+- name: google.cloud.discoveryengine.v1alpha.ImportSampleQueriesMetadata
+- name: google.cloud.discoveryengine.v1alpha.ImportSampleQueriesResponse
+- name: google.cloud.discoveryengine.v1alpha.ImportSuggestionDenyListEntriesMetadata
+- name: google.cloud.discoveryengine.v1alpha.ImportSuggestionDenyListEntriesResponse
 - name: google.cloud.discoveryengine.v1alpha.ImportUserEventsMetadata
 - name: google.cloud.discoveryengine.v1alpha.ImportUserEventsResponse
+- name: google.cloud.discoveryengine.v1alpha.ListCustomModelsResponse
+- name: google.cloud.discoveryengine.v1alpha.Project
+- name: google.cloud.discoveryengine.v1alpha.ProvisionProjectMetadata
+- name: google.cloud.discoveryengine.v1alpha.PurgeCompletionSuggestionsMetadata
+- name: google.cloud.discoveryengine.v1alpha.PurgeCompletionSuggestionsResponse
 - name: google.cloud.discoveryengine.v1alpha.PurgeDocumentsMetadata
 - name: google.cloud.discoveryengine.v1alpha.PurgeDocumentsResponse
+- name: google.cloud.discoveryengine.v1alpha.PurgeSuggestionDenyListEntriesMetadata
+- name: google.cloud.discoveryengine.v1alpha.PurgeSuggestionDenyListEntriesResponse
 - name: google.cloud.discoveryengine.v1alpha.PurgeUserEventsMetadata
 - name: google.cloud.discoveryengine.v1alpha.PurgeUserEventsResponse
 - name: google.cloud.discoveryengine.v1alpha.RecrawlUrisMetadata
 - name: google.cloud.discoveryengine.v1alpha.RecrawlUrisResponse
 - name: google.cloud.discoveryengine.v1alpha.Schema
+- name: google.cloud.discoveryengine.v1alpha.Session
+- name: google.cloud.discoveryengine.v1alpha.SetUriPatternDocumentDataMetadata
+- name: google.cloud.discoveryengine.v1alpha.SetUriPatternDocumentDataResponse
 - name: google.cloud.discoveryengine.v1alpha.TargetSite
 - name: google.cloud.discoveryengine.v1alpha.TrainCustomModelMetadata
 - name: google.cloud.discoveryengine.v1alpha.TrainCustomModelResponse
@@ -62,6 +97,12 @@ documentation:
 
 http:
   rules:
+  - selector: google.longrunning.Operations.CancelOperation
+    post: '/v1alpha/{name=projects/*/locations/*/collections/*/dataStores/*/branches/*/operations/*}:cancel'
+    body: '*'
+    additional_bindings:
+    - post: '/v1alpha/{name=projects/*/locations/*/dataStores/*/branches/*/operations/*}:cancel'
+      body: '*'
   - selector: google.longrunning.Operations.GetOperation
     get: '/v1alpha/{name=projects/*/locations/*/collections/*/dataConnector/operations/*}'
     additional_bindings:
@@ -76,7 +117,10 @@ http:
     - get: '/v1alpha/{name=projects/*/locations/*/dataStores/*/branches/*/operations/*}'
     - get: '/v1alpha/{name=projects/*/locations/*/dataStores/*/models/*/operations/*}'
     - get: '/v1alpha/{name=projects/*/locations/*/dataStores/*/operations/*}'
+    - get: '/v1alpha/{name=projects/*/locations/*/evaluations/*/operations/*}'
+    - get: '/v1alpha/{name=projects/*/locations/*/identity_mapping_stores/*/operations/*}'
     - get: '/v1alpha/{name=projects/*/locations/*/operations/*}'
+    - get: '/v1alpha/{name=projects/*/locations/*/sampleQuerySets/*/operations/*}'
     - get: '/v1alpha/{name=projects/*/operations/*}'
   - selector: google.longrunning.Operations.ListOperations
     get: '/v1alpha/{name=projects/*/locations/*/collections/*/dataConnector}/operations'
@@ -92,12 +136,33 @@ http:
     - get: '/v1alpha/{name=projects/*/locations/*/dataStores/*/branches/*}/operations'
     - get: '/v1alpha/{name=projects/*/locations/*/dataStores/*/models/*}/operations'
     - get: '/v1alpha/{name=projects/*/locations/*/dataStores/*}/operations'
+    - get: '/v1alpha/{name=projects/*/locations/*/identity_mapping_stores/*}/operations'
     - get: '/v1alpha/{name=projects/*/locations/*}/operations'
     - get: '/v1alpha/{name=projects/*}/operations'
 
 authentication:
   rules:
-  - selector: google.cloud.discoveryengine.v1alpha.CompletionService.CompleteQuery
+  - selector: google.cloud.discoveryengine.v1alpha.AclConfigService.GetAclConfig
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: google.cloud.discoveryengine.v1alpha.AclConfigService.UpdateAclConfig
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: google.cloud.discoveryengine.v1alpha.ChunkService.GetChunk
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: google.cloud.discoveryengine.v1alpha.ChunkService.ListChunks
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: 'google.cloud.discoveryengine.v1alpha.CompletionService.*'
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: 'google.cloud.discoveryengine.v1alpha.ControlService.*'
     oauth:
       canonical_scopes: |-
         https://www.googleapis.com/auth/cloud-platform
@@ -117,7 +182,35 @@ authentication:
     oauth:
       canonical_scopes: |-
         https://www.googleapis.com/auth/cloud-platform
+  - selector: google.cloud.discoveryengine.v1alpha.EstimateBillingService.EstimateDataSize
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: 'google.cloud.discoveryengine.v1alpha.EvaluationService.*'
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: google.cloud.discoveryengine.v1alpha.GroundedGenerationService.CheckGrounding
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: 'google.cloud.discoveryengine.v1alpha.ProjectService.*'
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: google.cloud.discoveryengine.v1alpha.RankService.Rank
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
   - selector: google.cloud.discoveryengine.v1alpha.RecommendationService.Recommend
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: 'google.cloud.discoveryengine.v1alpha.SampleQueryService.*'
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: 'google.cloud.discoveryengine.v1alpha.SampleQuerySetService.*'
     oauth:
       canonical_scopes: |-
         https://www.googleapis.com/auth/cloud-platform
@@ -129,7 +222,15 @@ authentication:
     oauth:
       canonical_scopes: |-
         https://www.googleapis.com/auth/cloud-platform
+  - selector: google.cloud.discoveryengine.v1alpha.SearchTuningService.ListCustomModels
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
   - selector: google.cloud.discoveryengine.v1alpha.SearchTuningService.TrainCustomModel
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: 'google.cloud.discoveryengine.v1alpha.ServingConfigService.*'
     oauth:
       canonical_scopes: |-
         https://www.googleapis.com/auth/cloud-platform
@@ -141,11 +242,7 @@ authentication:
     oauth:
       canonical_scopes: |-
         https://www.googleapis.com/auth/cloud-platform
-  - selector: google.longrunning.Operations.GetOperation
-    oauth:
-      canonical_scopes: |-
-        https://www.googleapis.com/auth/cloud-platform
-  - selector: google.longrunning.Operations.ListOperations
+  - selector: 'google.longrunning.Operations.*'
     oauth:
       canonical_scopes: |-
         https://www.googleapis.com/auth/cloud-platform

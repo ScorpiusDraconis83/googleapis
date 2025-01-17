@@ -3,42 +3,6 @@
     {
       "name": [
         {
-          "service": "google.cloud.dialogflow.aam.v2beta1.AamAdminTool"
-        },
-        {
-          "service": "google.cloud.dialogflow.aam.v2beta1.AamDatasets"
-        },
-        {
-          "service": "google.cloud.dialogflow.aam.v2beta1.AamDiscriminants"
-        },
-        {
-          "service": "google.cloud.dialogflow.aam.v2beta1.AamDiscriminantChanges"
-        },
-        {
-          "service": "google.cloud.dialogflow.aam.v2beta1.AamLabels"
-        },
-        {
-          "service": "google.cloud.dialogflow.aam.v2beta1.AamNotices"
-        },
-        {
-          "service": "google.cloud.dialogflow.aam.v2beta1.AamProjects"
-        },
-        {
-          "service": "google.cloud.dialogflow.aam.v2beta1.AamTasks"
-        },
-        {
-          "service": "google.cloud.dialogflow.aam.v2beta1.AamTopicClusters"
-        },
-        {
-          "service": "google.cloud.dialogflow.aam.v2beta1.AamTrainingRuns"
-        },
-        {
-          "service": "google.cloud.dialogflow.aam.v2beta1.AamTranscripts"
-        },
-        {
-          "service": "google.cloud.dialogflow.aam.v2beta1.AamUtterances"
-        },
-        {
           "service": "google.cloud.dialogflow.v2beta1.Agents"
         },
         {
@@ -49,6 +13,18 @@
         },
         {
           "service": "google.cloud.dialogflow.v2beta1.Contexts"
+        },
+        {
+          "service": "google.cloud.dialogflow.v2beta1.ConversationalTrainingAssignments"
+        },
+        {
+          "service": "google.cloud.dialogflow.v2beta1.ConversationalTrainingMembers"
+        },
+        {
+          "service": "google.cloud.dialogflow.v2beta1.ConversationalTrainingModules"
+        },
+        {
+          "service": "google.cloud.dialogflow.v2beta1.ConversationalTrainingTeams"
         },
         {
           "service": "google.cloud.dialogflow.v2beta1.ConversationProfiles"
@@ -92,15 +68,11 @@
         {
           "service": "google.cloud.dialogflow.v2beta1.HumanAssistService"
         },
-
         {
           "service": "google.cloud.dialogflow.v2beta1.Integrations"
         },
         {
           "service": "google.cloud.dialogflow.v2beta1.Intents"
-        },
-        {
-          "service": "google.cloud.dialogflow.v2beta1.IvrNodes"
         },
         {
           "service": "google.cloud.dialogflow.v2beta1.KnowledgeBases"
@@ -125,6 +97,12 @@
         },
         {
           "service": "google.cloud.dialogflow.v2beta1.SessionEntityTypes"
+        },
+        {
+          "service": "google.cloud.dialogflow.v2beta1.SipTrunks"
+        },
+        {
+          "service": "google.cloud.dialogflow.v2beta1.Tools"
         },
         {
           "service": "google.cloud.dialogflow.v2beta1.Versions"

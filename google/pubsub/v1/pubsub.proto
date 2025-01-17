@@ -1,4 +1,4 @@
-// Copyright 2023 Google LLC
+// Copyright 2024 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -203,7 +203,7 @@ message IngestionDataSourceSettings {
       KINESIS_PERMISSION_DENIED = 2;
 
       // Permission denied encountered while publishing to the topic. This can
-      // happen due to Pub/Sub SA has not been granted the [appropriate publish
+      // happen if the Pub/Sub SA has not been granted the [appropriate publish
       // permissions](https://cloud.google.com/pubsub/docs/access-control#pubsub.publisher)
       PUBLISH_PERMISSION_DENIED = 3;
 
@@ -237,10 +237,440 @@ message IngestionDataSourceSettings {
     string gcp_service_account = 5 [(google.api.field_behavior) = REQUIRED];
   }
 
+  // Ingestion settings for Cloud Storage.
+  message CloudStorage {
+    // Possible states for ingestion from Cloud Storage.
+    enum State {
+      // Default value. This value is unused.
+      STATE_UNSPECIFIED = 0;
+
+      // Ingestion is active.
+      ACTIVE = 1;
+
+      // Permission denied encountered while calling the Cloud Storage API. This
+      // can happen if the Pub/Sub SA has not been granted the
+      // [appropriate
+      // permissions](https://cloud.google.com/storage/docs/access-control/iam-permissions):
+      // - storage.objects.list: to list the objects in a bucket.
+      // - storage.objects.get: to read the objects in a bucket.
+      // - storage.buckets.get: to verify the bucket exists.
+      CLOUD_STORAGE_PERMISSION_DENIED = 2;
+
+      // Permission denied encountered while publishing to the topic. This can
+      // happen if the Pub/Sub SA has not been granted the [appropriate publish
+      // permissions](https://cloud.google.com/pubsub/docs/access-control#pubsub.publisher)
+      PUBLISH_PERMISSION_DENIED = 3;
+
+      // The provided Cloud Storage bucket doesn't exist.
+      BUCKET_NOT_FOUND = 4;
+
+      // The Cloud Storage bucket has too many objects, ingestion will be
+      // paused.
+      TOO_MANY_OBJECTS = 5;
+    }
+
+    // Configuration for reading Cloud Storage data in text format. Each line of
+    // text as specified by the delimiter will be set to the `data` field of a
+    // Pub/Sub message.
+    message TextFormat {
+      // Optional. When unset, '\n' is used.
+      optional string delimiter = 1 [(google.api.field_behavior) = OPTIONAL];
+    }
+
+    // Configuration for reading Cloud Storage data in Avro binary format. The
+    // bytes of each object will be set to the `data` field of a Pub/Sub
+    // message.
+    message AvroFormat {}
+
+    // Configuration for reading Cloud Storage data written via [Cloud Storage
+    // subscriptions](https://cloud.google.com/pubsub/docs/cloudstorage). The
+    // data and attributes fields of the originally exported Pub/Sub message
+    // will be restored when publishing.
+    message PubSubAvroFormat {}
+
+    // Output only. An output-only field that indicates the state of the Cloud
+    // Storage ingestion source.
+    State state = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+    // Optional. Cloud Storage bucket. The bucket name must be without any
+    // prefix like "gs://". See the [bucket naming requirements]
+    // (https://cloud.google.com/storage/docs/buckets#naming).
+    string bucket = 2 [(google.api.field_behavior) = OPTIONAL];
+
+    // Defaults to text format.
+    oneof input_format {
+      // Optional. Data from Cloud Storage will be interpreted as text.
+      TextFormat text_format = 3 [(google.api.field_behavior) = OPTIONAL];
+
+      // Optional. Data from Cloud Storage will be interpreted in Avro format.
+      AvroFormat avro_format = 4 [(google.api.field_behavior) = OPTIONAL];
+
+      // Optional. It will be assumed data from Cloud Storage was written via
+      // [Cloud Storage
+      // subscriptions](https://cloud.google.com/pubsub/docs/cloudstorage).
+      PubSubAvroFormat pubsub_avro_format = 5
+          [(google.api.field_behavior) = OPTIONAL];
+    }
+
+    // Optional. Only objects with a larger or equal creation timestamp will be
+    // ingested.
+    google.protobuf.Timestamp minimum_object_create_time = 6
+        [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. Glob pattern used to match objects that will be ingested. If
+    // unset, all objects will be ingested. See the [supported
+    // patterns](https://cloud.google.com/storage/docs/json_api/v1/objects/list#list-objects-and-prefixes-using-glob).
+    string match_glob = 9 [(google.api.field_behavior) = OPTIONAL];
+  }
+
+  // Ingestion settings for Azure Event Hubs.
+  message AzureEventHubs {
+    // Possible states for managed ingestion from Event Hubs.
+    enum State {
+      // Default value. This value is unused.
+      STATE_UNSPECIFIED = 0;
+
+      // Ingestion is active.
+      ACTIVE = 1;
+
+      // Permission denied encountered while consuming data from Event Hubs.
+      // This can happen when `client_id`, or `tenant_id` are invalid. Or the
+      // right permissions haven't been granted.
+      EVENT_HUBS_PERMISSION_DENIED = 2;
+
+      // Permission denied encountered while publishing to the topic.
+      PUBLISH_PERMISSION_DENIED = 3;
+
+      // The provided Event Hubs namespace couldn't be found.
+      NAMESPACE_NOT_FOUND = 4;
+
+      // The provided Event Hub couldn't be found.
+      EVENT_HUB_NOT_FOUND = 5;
+
+      // The provided Event Hubs subscription couldn't be found.
+      SUBSCRIPTION_NOT_FOUND = 6;
+
+      // The provided Event Hubs resource group couldn't be found.
+      RESOURCE_GROUP_NOT_FOUND = 7;
+    }
+
+    // Output only. An output-only field that indicates the state of the Event
+    // Hubs ingestion source.
+    State state = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+    // Optional. Name of the resource group within the azure subscription.
+    string resource_group = 2 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. The name of the Event Hubs namespace.
+    string namespace = 3 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. The name of the Event Hub.
+    string event_hub = 4 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. The client id of the Azure application that is being used to
+    // authenticate Pub/Sub.
+    string client_id = 5 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. The tenant id of the Azure application that is being used to
+    // authenticate Pub/Sub.
+    string tenant_id = 6 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. The Azure subscription id.
+    string subscription_id = 7 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. The GCP service account to be used for Federated Identity
+    // authentication.
+    string gcp_service_account = 8 [(google.api.field_behavior) = OPTIONAL];
+  }
+
+  // Ingestion settings for Amazon MSK.
+  message AwsMsk {
+    // Possible states for managed ingestion from Amazon MSK.
+    enum State {
+      // Default value. This value is unused.
+      STATE_UNSPECIFIED = 0;
+
+      // Ingestion is active.
+      ACTIVE = 1;
+
+      // Permission denied encountered while consuming data from Amazon MSK.
+      MSK_PERMISSION_DENIED = 2;
+
+      // Permission denied encountered while publishing to the topic.
+      PUBLISH_PERMISSION_DENIED = 3;
+
+      // The provided MSK cluster wasn't found.
+      CLUSTER_NOT_FOUND = 4;
+
+      // The provided topic wasn't found.
+      TOPIC_NOT_FOUND = 5;
+    }
+
+    // Output only. An output-only field that indicates the state of the Amazon
+    // MSK ingestion source.
+    State state = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+    // Required. The Amazon Resource Name (ARN) that uniquely identifies the
+    // cluster.
+    string cluster_arn = 2 [(google.api.field_behavior) = REQUIRED];
+
+    // Required. The name of the topic in the Amazon MSK cluster that Pub/Sub
+    // will import from.
+    string topic = 3 [(google.api.field_behavior) = REQUIRED];
+
+    // Required. AWS role ARN to be used for Federated Identity authentication
+    // with Amazon MSK. Check the Pub/Sub docs for how to set up this role and
+    // the required permissions that need to be attached to it.
+    string aws_role_arn = 4 [(google.api.field_behavior) = REQUIRED];
+
+    // Required. The GCP service account to be used for Federated Identity
+    // authentication with Amazon MSK (via a `AssumeRoleWithWebIdentity` call
+    // for the provided role). The `aws_role_arn` must be set up with
+    // `accounts.google.com:sub` equals to this service account number.
+    string gcp_service_account = 5 [(google.api.field_behavior) = REQUIRED];
+  }
+
+  // Ingestion settings for Confluent Cloud.
+  message ConfluentCloud {
+    // Possible states for managed ingestion from Confluent Cloud.
+    enum State {
+      // Default value. This value is unused.
+      STATE_UNSPECIFIED = 0;
+
+      // Ingestion is active.
+      ACTIVE = 1;
+
+      // Permission denied encountered while consuming data from Confluent
+      // Cloud.
+      CONFLUENT_CLOUD_PERMISSION_DENIED = 2;
+
+      // Permission denied encountered while publishing to the topic.
+      PUBLISH_PERMISSION_DENIED = 3;
+
+      // The provided bootstrap server address is unreachable.
+      UNREACHABLE_BOOTSTRAP_SERVER = 4;
+
+      // The provided cluster wasn't found.
+      CLUSTER_NOT_FOUND = 5;
+
+      // The provided topic wasn't found.
+      TOPIC_NOT_FOUND = 6;
+    }
+
+    // Output only. An output-only field that indicates the state of the
+    // Confluent Cloud ingestion source.
+    State state = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+    // Required. The address of the bootstrap server. The format is url:port.
+    string bootstrap_server = 2 [(google.api.field_behavior) = REQUIRED];
+
+    // Required. The id of the cluster.
+    string cluster_id = 3 [(google.api.field_behavior) = REQUIRED];
+
+    // Required. The name of the topic in the Confluent Cloud cluster that
+    // Pub/Sub will import from.
+    string topic = 4 [(google.api.field_behavior) = REQUIRED];
+
+    // Required. The id of the identity pool to be used for Federated Identity
+    // authentication with Confluent Cloud. See
+    // https://docs.confluent.io/cloud/current/security/authenticate/workload-identities/identity-providers/oauth/identity-pools.html#add-oauth-identity-pools.
+    string identity_pool_id = 5 [(google.api.field_behavior) = REQUIRED];
+
+    // Required. The GCP service account to be used for Federated Identity
+    // authentication with `identity_pool_id`.
+    string gcp_service_account = 6 [(google.api.field_behavior) = REQUIRED];
+  }
+
   // Only one source type can have settings set.
   oneof source {
     // Optional. Amazon Kinesis Data Streams.
     AwsKinesis aws_kinesis = 1 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. Cloud Storage.
+    CloudStorage cloud_storage = 2 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. Azure Event Hubs.
+    AzureEventHubs azure_event_hubs = 3
+        [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. Amazon MSK.
+    AwsMsk aws_msk = 5 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. Confluent Cloud.
+    ConfluentCloud confluent_cloud = 6 [(google.api.field_behavior) = OPTIONAL];
+  }
+
+  // Optional. Platform Logs settings. If unset, no Platform Logs will be
+  // generated.
+  PlatformLogsSettings platform_logs_settings = 4
+      [(google.api.field_behavior) = OPTIONAL];
+}
+
+// Settings for Platform Logs produced by Pub/Sub.
+message PlatformLogsSettings {
+  // Severity levels of Platform Logs.
+  enum Severity {
+    // Default value. Logs level is unspecified. Logs will be disabled.
+    SEVERITY_UNSPECIFIED = 0;
+
+    // Logs will be disabled.
+    DISABLED = 1;
+
+    // Debug logs and higher-severity logs will be written.
+    DEBUG = 2;
+
+    // Info logs and higher-severity logs will be written.
+    INFO = 3;
+
+    // Warning logs and higher-severity logs will be written.
+    WARNING = 4;
+
+    // Only error logs will be written.
+    ERROR = 5;
+  }
+
+  // Optional. The minimum severity level of Platform Logs that will be written.
+  Severity severity = 1 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// Payload of the Platform Log entry sent when a failure is encountered while
+// ingesting.
+message IngestionFailureEvent {
+  // Specifies the reason why some data may have been left out of
+  // the desired Pub/Sub message due to the API message limits
+  // (https://cloud.google.com/pubsub/quotas#resource_limits). For example,
+  // when the number of attributes is larger than 100, the number of
+  // attributes is truncated to 100 to respect the limit on the attribute count.
+  // Other attribute limits are treated similarly. When the size of the desired
+  // message would've been larger than 10MB, the message won't be published at
+  // all, and ingestion of the subsequent messages will proceed as normal.
+  message ApiViolationReason {}
+
+  // Set when an Avro file is unsupported or its format is not valid. When this
+  // occurs, one or more Avro objects won't be ingested.
+  message AvroFailureReason {}
+
+  // Failure when ingesting from a Cloud Storage source.
+  message CloudStorageFailure {
+    // Optional. Name of the Cloud Storage bucket used for ingestion.
+    string bucket = 1 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. Name of the Cloud Storage object which contained the section
+    // that couldn't be ingested.
+    string object_name = 2 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. Generation of the Cloud Storage object which contained the
+    // section that couldn't be ingested.
+    int64 object_generation = 3 [(google.api.field_behavior) = OPTIONAL];
+
+    // Reason why ingestion failed for the specified object.
+    oneof reason {
+      // Optional. Failure encountered when parsing an Avro file.
+      AvroFailureReason avro_failure_reason = 5
+          [(google.api.field_behavior) = OPTIONAL];
+
+      // Optional. The Pub/Sub API limits prevented the desired message from
+      // being published.
+      ApiViolationReason api_violation_reason = 6
+          [(google.api.field_behavior) = OPTIONAL];
+    }
+  }
+
+  // Failure when ingesting from an Amazon MSK source.
+  message AwsMskFailureReason {
+    // Optional. The ARN of the cluster of the topic being ingested from.
+    string cluster_arn = 1 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. The name of the Kafka topic being ingested from.
+    string kafka_topic = 2 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. The partition ID of the message that failed to be ingested.
+    int64 partition_id = 3 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. The offset within the partition of the message that failed to
+    // be ingested.
+    int64 offset = 4 [(google.api.field_behavior) = OPTIONAL];
+
+    // Reason why ingestion failed for the specified message.
+    oneof reason {
+      // Optional. The Pub/Sub API limits prevented the desired message from
+      // being published.
+      ApiViolationReason api_violation_reason = 5
+          [(google.api.field_behavior) = OPTIONAL];
+    }
+  }
+
+  // Failure when ingesting from an Azure Event Hubs source.
+  message AzureEventHubsFailureReason {
+    // Optional. The namespace containing the event hub being ingested from.
+    string namespace = 1 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. The name of the event hub being ingested from.
+    string event_hub = 2 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. The partition ID of the message that failed to be ingested.
+    int64 partition_id = 3 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. The offset within the partition of the message that failed to
+    // be ingested.
+    int64 offset = 4 [(google.api.field_behavior) = OPTIONAL];
+
+    // Reason why ingestion failed for the specified message.
+    oneof reason {
+      // Optional. The Pub/Sub API limits prevented the desired message from
+      // being published.
+      ApiViolationReason api_violation_reason = 5
+          [(google.api.field_behavior) = OPTIONAL];
+    }
+  }
+
+  // Failure when ingesting from a Confluent Cloud source.
+  message ConfluentCloudFailureReason {
+    // Optional. The cluster ID containing the topic being ingested from.
+    string cluster_id = 1 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. The name of the Kafka topic being ingested from.
+    string kafka_topic = 2 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. The partition ID of the message that failed to be ingested.
+    int64 partition_id = 3 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. The offset within the partition of the message that failed to
+    // be ingested.
+    int64 offset = 4 [(google.api.field_behavior) = OPTIONAL];
+
+    // Reason why ingestion failed for the specified message.
+    oneof reason {
+      // Optional. The Pub/Sub API limits prevented the desired message from
+      // being published.
+      ApiViolationReason api_violation_reason = 5
+          [(google.api.field_behavior) = OPTIONAL];
+    }
+  }
+
+  // Required. Name of the import topic. Format is:
+  // projects/{project_name}/topics/{topic_name}.
+  string topic = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Required. Error details explaining why ingestion to Pub/Sub has failed.
+  string error_message = 2 [(google.api.field_behavior) = REQUIRED];
+
+  oneof failure {
+    // Optional. Failure when ingesting from Cloud Storage.
+    CloudStorageFailure cloud_storage_failure = 3
+        [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. Failure when ingesting from Amazon MSK.
+    AwsMskFailureReason aws_msk_failure = 4
+        [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. Failure when ingesting from Azure Event Hubs.
+    AzureEventHubsFailureReason azure_event_hubs_failure = 5
+        [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. Failure when ingesting from Confluent Cloud.
+    ConfluentCloudFailureReason confluent_cloud_failure = 6
+        [(google.api.field_behavior) = OPTIONAL];
   }
 }
 
@@ -774,6 +1204,20 @@ message Subscription {
     RESOURCE_ERROR = 2;
   }
 
+  // Information about an associated Analytics Hub subscription
+  // (https://cloud.google.com/bigquery/docs/analytics-hub-manage-subscriptions).
+  message AnalyticsHubSubscriptionInfo {
+    // Optional. The name of the associated Analytics Hub listing resource.
+    // Pattern:
+    // "projects/{project}/locations/{location}/dataExchanges/{data_exchange}/listings/{listing}"
+    string listing = 1 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. The name of the associated Analytics Hub subscription resource.
+    // Pattern:
+    // "projects/{project}/locations/{location}/subscriptions/{subscription}"
+    string subscription = 2 [(google.api.field_behavior) = OPTIONAL];
+  }
+
   // Required. The name of the subscription. It must have the format
   // `"projects/{project}/subscriptions/{subscription}"`. `{subscription}` must
   // start with a letter, and contain only letters (`[A-Za-z]`), numbers
@@ -837,7 +1281,7 @@ message Subscription {
   // backlog, from the moment a message is published. If `retain_acked_messages`
   // is true, then this also configures the retention of acknowledged messages,
   // and thus configures how far back in time a `Seek` can be done. Defaults to
-  // 7 days. Cannot be more than 7 days or less than 10 minutes.
+  // 7 days. Cannot be more than 31 days or less than 10 minutes.
   google.protobuf.Duration message_retention_duration = 8
       [(google.api.field_behavior) = OPTIONAL];
 
@@ -922,6 +1366,11 @@ message Subscription {
   // Output only. An output-only field indicating whether or not the
   // subscription can receive messages.
   State state = 19 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only. Information about the associated Analytics Hub subscription.
+  // Only set if the subscritpion is created by Analytics Hub.
+  AnalyticsHubSubscriptionInfo analytics_hub_subscription_info = 23
+      [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
 // A policy that specifies how Pub/Sub retries message delivery.
@@ -1141,6 +1590,14 @@ message BigQueryConfig {
   // write to in BigQuery. `use_table_schema` and `use_topic_schema` cannot be
   // enabled at the same time.
   bool use_table_schema = 6 [(google.api.field_behavior) = OPTIONAL];
+
+  // Optional. The service account to use to write to BigQuery. The subscription
+  // creator or updater that specifies this field must have
+  // `iam.serviceAccounts.actAs` permission on the service account. If not
+  // specified, the Pub/Sub [service
+  // agent](https://cloud.google.com/iam/docs/service-agents),
+  // service-{project_number}@gcp-sa-pubsub.iam.gserviceaccount.com, is used.
+  string service_account_email = 7 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // Configuration for a Cloud Storage subscription.
@@ -1160,6 +1617,10 @@ message CloudStorageConfig {
     // data (for example, an ordering_key, if present) are added as entries in
     // the attributes map.
     bool write_metadata = 1 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. When true, the output Cloud Storage file will be serialized
+    // using the topic schema, if it exists.
+    bool use_topic_schema = 2 [(google.api.field_behavior) = OPTIONAL];
   }
 
   // Possible states for a Cloud Storage subscription.
@@ -1180,6 +1641,10 @@ message CloudStorageConfig {
     // Cannot write to the destination because enforce_in_transit is set to true
     // and the destination locations are not in the allowed regions.
     IN_TRANSIT_LOCATION_RESTRICTION = 4;
+
+    // Cannot write to the Cloud Storage bucket due to an incompatibility
+    // between the topic schema and subscription settings.
+    SCHEMA_MISMATCH = 5;
   }
 
   // Required. User-provided name for the Cloud Storage bucket.
@@ -1196,6 +1661,11 @@ message CloudStorageConfig {
   // naming requirements](https://cloud.google.com/storage/docs/objects#naming).
   // Must not end in "/".
   string filename_suffix = 3 [(google.api.field_behavior) = OPTIONAL];
+
+  // Optional. User-provided format string specifying how to represent datetimes
+  // in Cloud Storage filenames. See the [datetime format
+  // guidance](https://cloud.google.com/pubsub/docs/create-cloudstorage-subscription#file_names).
+  string filename_datetime_format = 10 [(google.api.field_behavior) = OPTIONAL];
 
   // Defaults to text format.
   oneof output_format {
@@ -1219,9 +1689,21 @@ message CloudStorageConfig {
   // be exceeded in cases where messages are larger than the limit.
   int64 max_bytes = 7 [(google.api.field_behavior) = OPTIONAL];
 
+  // Optional. The maximum number of messages that can be written to a Cloud
+  // Storage file before a new file is created. Min 1000 messages.
+  int64 max_messages = 8 [(google.api.field_behavior) = OPTIONAL];
+
   // Output only. An output-only field that indicates whether or not the
   // subscription can receive messages.
   State state = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Optional. The service account to use to write to Cloud Storage. The
+  // subscription creator or updater that specifies this field must have
+  // `iam.serviceAccounts.actAs` permission on the service account. If not
+  // specified, the Pub/Sub
+  // [service agent](https://cloud.google.com/iam/docs/service-agents),
+  // service-{project_number}@gcp-sa-pubsub.iam.gserviceaccount.com, is used.
+  string service_account_email = 11 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // A message and its corresponding acknowledgment ID.

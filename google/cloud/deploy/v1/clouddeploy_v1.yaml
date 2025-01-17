@@ -12,7 +12,10 @@ apis:
 types:
 - name: google.cloud.deploy.v1.AutomationEvent
 - name: google.cloud.deploy.v1.AutomationRunEvent
+- name: google.cloud.deploy.v1.CustomTargetTypeNotificationEvent
 - name: google.cloud.deploy.v1.DeliveryPipelineNotificationEvent
+- name: google.cloud.deploy.v1.DeployPolicyEvaluationEvent
+- name: google.cloud.deploy.v1.DeployPolicyNotificationEvent
 - name: google.cloud.deploy.v1.JobRunNotificationEvent
 - name: google.cloud.deploy.v1.OperationMetadata
 - name: google.cloud.deploy.v1.ReleaseNotificationEvent
@@ -62,11 +65,14 @@ http:
     get: '/v1/{resource=projects/*/locations/*/deliveryPipelines/*}:getIamPolicy'
     additional_bindings:
     - get: '/v1/{resource=projects/*/locations/*/targets/*}:getIamPolicy'
+    - get: '/v1/{resource=projects/*/locations/*/customTargetTypes/*}:getIamPolicy'
   - selector: google.iam.v1.IAMPolicy.SetIamPolicy
     post: '/v1/{resource=projects/*/locations/*/deliveryPipelines/*}:setIamPolicy'
     body: '*'
     additional_bindings:
     - post: '/v1/{resource=projects/*/locations/*/targets/*}:setIamPolicy'
+      body: '*'
+    - post: '/v1/{resource=projects/*/locations/*/customTargetTypes/*}:setIamPolicy'
       body: '*'
   - selector: google.iam.v1.IAMPolicy.TestIamPermissions
     post: '/v1/{resource=projects/*/locations/*/deliveryPipelines/*}:testIamPermissions'

@@ -1,7 +1,7 @@
 type: google.api.Service
 config_version: 3
 name: retail.googleapis.com
-title: Retail API
+title: Vertex AI Search for Retail API
 
 apis:
 - name: google.cloud.location.Locations
@@ -9,9 +9,11 @@ apis:
 - name: google.cloud.retail.v2beta.CatalogService
 - name: google.cloud.retail.v2beta.CompletionService
 - name: google.cloud.retail.v2beta.ControlService
+- name: google.cloud.retail.v2beta.GenerativeQuestionService
 - name: google.cloud.retail.v2beta.ModelService
 - name: google.cloud.retail.v2beta.PredictionService
 - name: google.cloud.retail.v2beta.ProductService
+- name: google.cloud.retail.v2beta.ProjectService
 - name: google.cloud.retail.v2beta.SearchService
 - name: google.cloud.retail.v2beta.ServingConfigService
 - name: google.cloud.retail.v2beta.UserEventService
@@ -36,6 +38,8 @@ types:
 - name: google.cloud.retail.v2beta.ImportUserEventsResponse
 - name: google.cloud.retail.v2beta.Model
 - name: google.cloud.retail.v2beta.PurgeMetadata
+- name: google.cloud.retail.v2beta.PurgeProductsMetadata
+- name: google.cloud.retail.v2beta.PurgeProductsResponse
 - name: google.cloud.retail.v2beta.PurgeUserEventsResponse
 - name: google.cloud.retail.v2beta.RejoinUserEventsMetadata
 - name: google.cloud.retail.v2beta.RejoinUserEventsResponse
@@ -50,36 +54,16 @@ types:
 
 documentation:
   summary: |-
-    Cloud Retail service enables customers to build end-to-end personalized
-    recommendation systems without requiring a high level of expertise in
-    machine learning, recommendation system, or Google Cloud.
+    Vertex AI Search for Retail API is made up of Retail Search, Browse and
+    Recommendations. These discovery AI solutions help you implement
+    personalized search, browse and recommendations, based on machine learning
+    models, across your websites and mobile applications.
   rules:
   - selector: google.cloud.location.Locations.GetLocation
     description: Gets information about a location.
 
   - selector: google.cloud.location.Locations.ListLocations
     description: Lists information about the supported locations for this service.
-
-backend:
-  rules:
-  - selector: google.cloud.retail.v2beta.CatalogService.UpdateCatalog
-    deadline: 10.0
-  - selector: google.cloud.retail.v2beta.CompletionService.ImportCompletionData
-    deadline: 300.0
-  - selector: 'google.cloud.retail.v2beta.ModelService.*'
-    deadline: 60.0
-  - selector: 'google.cloud.retail.v2beta.ProductService.*'
-    deadline: 30.0
-  - selector: google.cloud.retail.v2beta.ProductService.ImportProducts
-    deadline: 300.0
-  - selector: google.cloud.retail.v2beta.UserEventService.CollectUserEvent
-    deadline: 10.0
-  - selector: google.cloud.retail.v2beta.UserEventService.ImportUserEvents
-    deadline: 600.0
-  - selector: google.cloud.retail.v2beta.UserEventService.PurgeUserEvents
-    deadline: 30.0
-  - selector: google.longrunning.Operations.ListOperations
-    deadline: 300.0
 
 http:
   rules:
@@ -125,6 +109,10 @@ authentication:
     oauth:
       canonical_scopes: |-
         https://www.googleapis.com/auth/cloud-platform
+  - selector: 'google.cloud.retail.v2beta.GenerativeQuestionService.*'
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
   - selector: 'google.cloud.retail.v2beta.ModelService.*'
     oauth:
       canonical_scopes: |-
@@ -134,6 +122,14 @@ authentication:
       canonical_scopes: |-
         https://www.googleapis.com/auth/cloud-platform
   - selector: 'google.cloud.retail.v2beta.ProductService.*'
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: google.cloud.retail.v2beta.ProjectService.GetAlertConfig
+    oauth:
+      canonical_scopes: |-
+        https://www.googleapis.com/auth/cloud-platform
+  - selector: google.cloud.retail.v2beta.ProjectService.UpdateAlertConfig
     oauth:
       canonical_scopes: |-
         https://www.googleapis.com/auth/cloud-platform

@@ -1,4 +1,4 @@
-// Copyright 2023 Google LLC
+// Copyright 2024 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -234,6 +234,9 @@ message AndroidModel {
 
   // URL of a thumbnail image (photo) of the device.
   string thumbnail_url = 19;
+
+  // Output only. Lab info of this device.
+  LabInfo lab_info = 26 [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
 // A version of the Android OS.
@@ -273,6 +276,11 @@ message PerAndroidVersionInfo {
   // The number of online devices for an Android version.
   DeviceCapacity device_capacity = 2;
 
+  // Output only. The estimated wait time for a single interactive device
+  // session using Direct Access.
+  google.protobuf.Duration interactive_device_availability_estimate = 3
+      [(google.api.field_behavior) = OUTPUT_ONLY];
+
   // Output only. Identifies supported clients for DirectAccess for this Android
   // version.
   DirectAccessVersionInfo direct_access_version_info = 4
@@ -306,6 +314,13 @@ message Distribution {
   // Output only. The estimated fraction (0-1) of the total market with this
   // configuration.
   double market_share = 2;
+}
+
+// Lab specific information for a device.
+message LabInfo {
+  // Lab name where the device is hosted.
+  // If empty, the device is hosted in a Google owned lab.
+  string name = 1;
 }
 
 // The currently supported iOS devices.

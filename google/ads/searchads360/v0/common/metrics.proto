@@ -1,4 +1,4 @@
-// Copyright 2023 Google LLC
+// Copyright 2024 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,8 +33,8 @@ option ruby_package = "Google::Ads::SearchAds360::V0::Common";
 
 // Metrics data.
 message Metrics {
-  // The percent of your ad impressions that are shown as the very first ad
-  // above the organic search results.
+  // Search absolute top impression share is the percentage of your Search ad
+  // impressions that are shown in the most prominent Search position.
   optional double absolute_top_impression_percentage = 183;
 
   // All conversions from interactions (as oppose to view through conversions)
@@ -220,8 +220,18 @@ message Metrics {
   // Cross-device conversions are already included in all_conversions.
   optional double cross_device_conversions = 173;
 
+  // The number of cross-device conversions by conversion date.
+  // Details for the by_conversion_date columns are available at
+  // https://support.google.com/sa360/answer/9250611.
+  optional double cross_device_conversions_by_conversion_date = 372;
+
   // The sum of the value of cross-device conversions.
   optional double cross_device_conversions_value = 253;
+
+  // The sum of cross-device conversions value by conversion date.
+  // Details for the by_conversion_date columns are available at
+  // https://support.google.com/sa360/answer/9250611.
+  optional double cross_device_conversions_value_by_conversion_date = 373;
 
   // The number of clicks your ad receives (Clicks) divided by the number
   // of times your ad is shown (Impressions).
@@ -241,6 +251,9 @@ message Metrics {
   // The creative historical quality score.
   google.ads.searchads360.v0.enums.QualityScoreBucketEnum.QualityScoreBucket
       historical_creative_quality_score = 80;
+
+  // The average quality score.
+  optional double average_quality_score = 364;
 
   // The quality of historical landing page experience.
   google.ads.searchads360.v0.enums.QualityScoreBucketEnum.QualityScoreBucket
@@ -278,6 +291,26 @@ message Metrics {
   // Number of clicks Google considers illegitimate and doesn't charge you for.
   optional int64 invalid_clicks = 225;
 
+  // The percentage of clicks that have been filtered out of your total number
+  // of clicks (filtered + non-filtered clicks) due to being general invalid
+  // clicks. These are clicks Google considers illegitimate that are detected
+  // through routine means of filtration (that is, known invalid data-center
+  // traffic, bots and spiders or other crawlers, irregular patterns, etc).
+  // You're not charged for them, and they don't affect your account statistics.
+  // See the help page at
+  // https://support.google.com/campaignmanager/answer/6076504 for
+  // details.
+  optional double general_invalid_click_rate = 370;
+
+  // Number of general invalid clicks. These are a subset of your invalid clicks
+  // that are detected through routine means of filtration (such as known
+  // invalid data-center traffic, bots and spiders or other crawlers, irregular
+  // patterns, etc.). You're not charged for them, and they don't affect your
+  // account statistics. See the help page at
+  // https://support.google.com/campaignmanager/answer/6076504 for
+  // details.
+  optional int64 general_invalid_clicks = 371;
+
   // The percentage of mobile clicks that go to a mobile-friendly page.
   optional double mobile_friendly_clicks_percentage = 229;
 
@@ -290,8 +323,8 @@ message Metrics {
   // for details. Any value below 0.1 is reported as 0.0999.
   optional double search_absolute_top_impression_share = 136;
 
-  // The number estimating how often your ad wasn't the very first ad above the
-  // organic search results due to a low budget. Note: Search
+  // The number estimating how often your ad wasn't the very first ad among the
+  // top ads in the search results due to a low budget. Note: Search
   // budget lost absolute top impression share is reported in the range of 0 to
   // 0.9. Any value above 0.9 is reported as 0.9001.
   optional double search_budget_lost_absolute_top_impression_share = 137;
@@ -302,7 +335,7 @@ message Metrics {
   // value above 0.9 is reported as 0.9001.
   optional double search_budget_lost_impression_share = 138;
 
-  // The number estimating how often your ad didn't show anywhere above the
+  // The number estimating how often your ad didn't show adjacent to the top
   // organic search results due to a low budget. Note: Search
   // budget lost top impression share is reported in the range of 0 to 0.9. Any
   // value above 0.9 is reported as 0.9001.
@@ -328,8 +361,8 @@ message Metrics {
   // value below 0.1 is reported as 0.0999.
   optional double search_impression_share = 142;
 
-  // The number estimating how often your ad wasn't the very first ad above the
-  // organic search results due to poor Ad Rank.
+  // The number estimating how often your ad wasn't the very first ad among the
+  // top ads in the search results due to poor Ad Rank.
   // Note: Search rank lost absolute top impression share is reported in the
   // range of 0 to 0.9. Any value above 0.9 is reported as 0.9001.
   optional double search_rank_lost_absolute_top_impression_share = 143;
@@ -340,20 +373,22 @@ message Metrics {
   // 0.9. Any value above 0.9 is reported as 0.9001.
   optional double search_rank_lost_impression_share = 144;
 
-  // The number estimating how often your ad didn't show anywhere above the
+  // The number estimating how often your ad didn't show adjacent to the top
   // organic search results due to poor Ad Rank.
   // Note: Search rank lost top impression share is reported in the range of 0
   // to 0.9. Any value above 0.9 is reported as 0.9001.
   optional double search_rank_lost_top_impression_share = 145;
 
-  // The impressions you've received in the top location (anywhere above the
-  // organic search results) compared to the estimated number of impressions you
-  // were eligible to receive in the top location.
+  // The impressions you've received among the top ads compared to the estimated
+  // number of impressions you were eligible to receive among the top ads.
   // Note: Search top impression share is reported in the range of 0.1 to 1. Any
   // value below 0.1 is reported as 0.0999.
+  //
+  // Top ads are generally above the top organic results, although they may show
+  // below the top organic results on certain queries.
   optional double search_top_impression_share = 146;
 
-  // The percent of your ad impressions that are shown anywhere above the
+  // The percent of your ad impressions that are shown adjacent to the top
   // organic search results.
   optional double top_impression_percentage = 148;
 

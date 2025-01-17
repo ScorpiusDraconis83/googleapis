@@ -1,4 +1,4 @@
-// Copyright 2023 Google LLC
+// Copyright 2024 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -35,6 +35,8 @@ option ruby_package = "Google::Ads::SearchAds360::V0::Resources";
 // Proto file describing the ad group criterion resource.
 
 // An ad group criterion.
+// The ad_group_criterion report only returns criteria that were explicitly
+// added to the ad group.
 message AdGroupCriterion {
   option (google.api.resource) = {
     type: "searchads360.googleapis.com/AdGroupCriterion"
@@ -121,6 +123,16 @@ message AdGroupCriterion {
     }
   ];
 
+  // Output only. The resource names of effective labels attached to this ad
+  // group criterion. An effective label is a label inherited or directly
+  // assigned to this ad group criterion.
+  repeated string effective_labels = 87 [
+    (google.api.field_behavior) = OUTPUT_ONLY,
+    (google.api.resource_reference) = {
+      type: "searchads360.googleapis.com/AdGroupCriterionEffectiveLabel"
+    }
+  ];
+
   // The modifier for the bid when the criterion matches. The modifier must be
   // in the range: 0.1 - 10.0. Most targetable criteria types support modifiers.
   optional double bid_modifier = 61;
@@ -183,9 +195,6 @@ message AdGroupCriterion {
         [(google.api.field_behavior) = IMMUTABLE];
 
     // Immutable. User List.
-    // The Similar Audiences sunset starts May 2023. Refer to
-    // https://ads-developers.googleblog.com/2022/11/announcing-deprecation-and-sunset-of.html
-    // for other options.
     google.ads.searchads360.v0.common.UserListInfo user_list = 42
         [(google.api.field_behavior) = IMMUTABLE];
 

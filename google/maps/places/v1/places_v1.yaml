@@ -13,15 +13,15 @@ documentation:
   overview: '<!--#include file="/geo/platform/places/g3doc/overview.md"-->'
 
 publishing:
-  new_issue_uri: https://issuetracker.google.com/issues/new?component=188872&template=1815671&pli=1
+  new_issue_uri: https://issuetracker.google.com/issues/new?component=188872&template=1815671
   documentation_uri: https://developers.google.com/maps/documentation/places/web-service/
   api_short_name: places
   github_label: 'api: places'
   doc_tag_prefix: places
   organization: GEO
   library_settings:
-  - version: google.maps.api.v1
-    launch_stage: GA
+  - version: google.maps.places.v1
+    launch_stage: BETA
     java_settings:
       common:
         destinations:

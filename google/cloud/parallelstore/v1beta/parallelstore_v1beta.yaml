@@ -27,7 +27,6 @@ http:
     get: '/v1beta/{name=projects/*}/locations'
   - selector: google.longrunning.Operations.CancelOperation
     post: '/v1beta/{name=projects/*/locations/*/operations/*}:cancel'
-    body: '*'
   - selector: google.longrunning.Operations.DeleteOperation
     delete: '/v1beta/{name=projects/*/locations/*/operations/*}'
   - selector: google.longrunning.Operations.GetOperation
@@ -56,7 +55,7 @@ authentication:
 
 publishing:
   new_issue_uri: https://issuetracker.google.com/issues/new?component=1181190
-  documentation_uri: http://cloud/parallelstore?hl=en
+  documentation_uri: https://cloud.google.com/parallelstore?hl=en
   api_short_name: parallelstore
   github_label: 'api: parallelstore'
   doc_tag_prefix: parallelstore
@@ -96,4 +95,3 @@ publishing:
       common:
         destinations:
         - PACKAGE_MANAGER
-  proto_reference_documentation_uri: http://cloud/parallelstore/docs/apis

@@ -1,4 +1,4 @@
-// Copyright 2022 Google LLC
+// Copyright 2024 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@ syntax = "proto3";
 
 package google.maps.routes.v1;
 
-option cc_enable_arenas = true;
 option csharp_namespace = "Google.Maps.Routes.V1";
 option go_package = "cloud.google.com/go/maps/routes/apiv1/routespb;routespb";
 option java_multiple_files = true;
@@ -61,11 +60,11 @@ enum FallbackRoutingMode {
   // Not used.
   FALLBACK_ROUTING_MODE_UNSPECIFIED = 0;
 
-  // Indicates the "TRAFFIC_UNAWARE" routing mode was used to compute the
+  // Indicates the `TRAFFIC_UNAWARE` routing mode was used to compute the
   // response.
   FALLBACK_TRAFFIC_UNAWARE = 1;
 
-  // Indicates the "TRAFFIC_AWARE" routing mode was used to compute the
+  // Indicates the `TRAFFIC_AWARE` routing mode was used to compute the
   // response.
   FALLBACK_TRAFFIC_AWARE = 2;
 }

@@ -12,6 +12,7 @@ apis:
 types:
 - name: google.cloud.alloydb.v1beta.BatchCreateInstancesResponse
 - name: google.cloud.alloydb.v1beta.OperationMetadata
+- name: google.cloud.alloydb.v1beta.UpgradeClusterResponse
 
 documentation:
   summary: |-
@@ -21,7 +22,7 @@ documentation:
     PostgreSQL, and is more than 4x faster for transactional workloads and up
     to 100x faster for analytical queries than standard PostgreSQL in our
     performance tests. AlloyDB for PostgreSQL offers a 99.99 percent
-    availability SLA inclusive of maintenance. <br><br> AlloyDB is optimized
+    availability SLA inclusive of maintenance. AlloyDB is optimized
     for the most demanding use cases, allowing you to build new applications
     that require high transaction throughput, large database sizes, or
     multiple read resources; scale existing PostgreSQL workloads with no
@@ -55,19 +56,6 @@ documentation:
       Note: This operation is designed to be used for building
       permission-aware UIs and command-line tools, not for authorization
       checking. This operation may "fail open" without warning.
-
-backend:
-  rules:
-  - selector: 'google.cloud.alloydb.v1beta.AlloyDBAdmin.*'
-    deadline: 60.0
-  - selector: google.cloud.location.Locations.GetLocation
-    deadline: 60.0
-  - selector: google.cloud.location.Locations.ListLocations
-    deadline: 60.0
-  - selector: 'google.iam.v1.IAMPolicy.*'
-    deadline: 60.0
-  - selector: 'google.longrunning.Operations.*'
-    deadline: 60.0
 
 http:
   rules:

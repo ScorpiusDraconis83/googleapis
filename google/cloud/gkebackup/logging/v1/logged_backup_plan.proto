@@ -1,4 +1,4 @@
-// Copyright 2021 Google LLC
+// Copyright 2024 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -106,4 +106,8 @@ message LoggedBackupPlan {
 
   // Defines backup configuration of this BackupPlan.
   BackupConfig backup_config = 7;
+
+  // A number that represents the current risk level of this BackupPlan from RPO
+  // perspective with 1 being no risk and 5 being highest risk.
+  int32 rpo_risk_level = 8;
 }
